@@ -1,5 +1,7 @@
 # Joga na Cumbuca
 
+**No ar:** https://cumbucacriativa.github.io/joganacumbuca/
+
 App mobile-first de cartas aleatórias para jogos de improviso teatral. Escolha uma categoria,
 sorteie um jogo, e use o dado no topo pra gerar um personagem e/ou uma localização aleatórios
 a qualquer momento.

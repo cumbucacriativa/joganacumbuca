@@ -3,6 +3,10 @@
 App mobile-first de cartas aleatórias para jogos de improviso teatral. HTML/CSS/JS puro
 (sem framework, sem build), dados em CSV lidos direto pelo client, hospedado no GitHub Pages.
 
+**No ar:** https://cumbucacriativa.github.io/joganacumbuca/
+**Repo:** https://github.com/cumbucacriativa/joganacumbuca (conta GitHub da Cumbuca Criativa,
+não da Lava — token em `_docs/github-cumbuca-criativa.md`)
+
 Documentação detalhada em [`_Docs/00-INDICE.md`](_Docs/00-INDICE.md) — leia antes de mexer em
 arquitetura, escopo ou dados.
 

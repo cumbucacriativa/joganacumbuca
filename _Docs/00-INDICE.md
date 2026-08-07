@@ -16,12 +16,11 @@
 
 ## Estado real do projeto
 
-Versão navegável funcionando localmente (4 telas + overlay de sorteio), com cores/tipografia/
-componentes batendo com os specs exatos e SVGs que o cliente exportou do XD — ver
-[05-DESIGN-VISUAL.md](05-DESIGN-VISUAL.md) e [03-CHANGELOG.md](03-CHANGELOG.md) v0.2.0. Ainda
-não está publicada no GitHub Pages (falta acesso — ver
-[04-REGISTRO-BUGS.md](04-REGISTRO-BUGS.md)) e tem algumas decisões de produto em aberto — ver
-"Decisões pendentes" em [02-ESCOPO.md](02-ESCOPO.md).
+Versão navegável no ar em **https://cumbucacriativa.github.io/joganacumbuca/** (4 telas +
+overlay de sorteio), com cores/tipografia/componentes batendo com os specs exatos e SVGs que o
+cliente exportou do XD — ver [05-DESIGN-VISUAL.md](05-DESIGN-VISUAL.md) e
+[03-CHANGELOG.md](03-CHANGELOG.md). Tem algumas decisões de produto em aberto — ver "Decisões
+pendentes" em [02-ESCOPO.md](02-ESCOPO.md).
 
 Não há doc de segurança/credenciais (`0X-SEGURANCA-E-CREDENCIAIS.md`) porque o projeto não usa
 nenhuma credencial — site estático público, sem backend, sem API keys. Se isso mudar

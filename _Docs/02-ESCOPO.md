@@ -51,6 +51,9 @@ um), e opcionalmente sorteia um personagem e/ou uma localização pra dar tema �
 4. **Versão navegável construída** — as 4 telas principais (início, categoria, jogo sorteado,
    lista de jogos) e o overlay de sorteio de personagem/local estão implementados e testados
    localmente, batendo visualmente com os prints do XD. Ver `03-CHANGELOG.md` v0.2.0.
+5. **Publicação no GitHub Pages** — repositório `cumbucacriativa/joganacumbuca` (conta GitHub
+   da Cumbuca Criativa) recebeu o push e o GitHub Pages foi ativado. Site no ar em
+   https://cumbucacriativa.github.io/joganacumbuca/. Ver `04-REGISTRO-BUGS.md`.
 
 ## Decisões pendentes (aguardando resposta do cliente)
 
@@ -66,10 +69,7 @@ um), e opcionalmente sorteia um personagem e/ou uma localização pra dar tema �
 5. **Quem edita os CSVs depois de prontos** — só o Kewin (via git/planilha) ou alguém sem
    perfil técnico vai mexer? Se for o segundo caso, talvez valha uma telinha admin simples em
    vez de editar CSV cru.
-6. **Publicação no GitHub** — sessão atual não tem GitHub CLI (`gh`) nem conector GitHub
-   autenticado disponível, então não consegui criar o repositório sozinho nem colocar no ar.
-   Ver `04-REGISTRO-BUGS.md` para as opções propostas.
-7. **Categoria e descrição dos 4 jogos de exemplo sem confirmação** (Musical, Congela, Medusa,
+6. **Categoria e descrição dos 4 jogos de exemplo sem confirmação** (Musical, Congela, Medusa,
    Círculo da Conexão) — só "Jogo do Troca" teve categoria e descrição confirmadas pelo design.
    Os outros usam "Trios" como placeholder estrutural e descrição em aberto — ver nota em
    `01-ARQUITETURA-GERAL.md`. Isso é só para os 5 jogos de exemplo; a planilha real do cliente

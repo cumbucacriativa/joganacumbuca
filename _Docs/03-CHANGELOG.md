@@ -44,5 +44,12 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 ### Pendente
 - "+ OPÇÕES" (tela do jogo) é um placeholder sem função ainda.
 - Categoria/descrição de 4 dos 5 jogos de exemplo é placeholder (ver `02-ESCOPO.md`).
-- PWA/offline, filtro ativo por mediador/aquecimento/música, e publicação no GitHub Pages —
-  ver `02-ESCOPO.md`.
+- PWA/offline e filtro ativo por mediador/aquecimento/música — ver `02-ESCOPO.md`.
+
+## [0.2.1] — 2026-08-07
+
+### Adicionado
+- Publicado no GitHub Pages: https://cumbucacriativa.github.io/joganacumbuca/. Repositório
+  `cumbucacriativa/joganacumbuca` (conta GitHub da Cumbuca Criativa, separada da Lava).
+- Credencial (PAT do GitHub da Cumbuca Criativa) salva em
+  `_docs/github-cumbuca-criativa.md`, seguindo o padrão do projeto.
