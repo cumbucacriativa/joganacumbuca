@@ -17,8 +17,8 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 ## [0.5.0] — 2026-08-07
 
 ### Adicionado
-- **93 jogos de improviso teatral reais** cadastrados em `data/jogos.csv` (pesquisados em bibliotecas internacionais e nacionais de teatro e improviso, como Viola Spolin, Keith Johnstone e Improv Encyclopedia), sem repetição, organizados nas 4 categorias centrais (`Duplas`, `Trios`, `Grupos`, `Todos`).
-- **Expansão massiva do banco de aleatoriedades** (`data/aleatoriedades.csv`) com 60 combinações de personagens (cotidianos, pop culture, figuras históricas, fantásticos) e localizações (cotidianas, eventos sociais, absurdas/fantásticas).
+- **93 jogos de improviso teatral reais** cadastrados em `data/jogos.csv` (pesquisados em bibliotecas internacionais e nacionais de teatro e improviso), organizados nas 4 categorias centrais (`Duplas`, `Trios`, `Grupos`, `Todos`).
+- **Expansão massiva do banco de aleatoriedades** (`data/aleatoriedades.csv`) com exatamente **500 Personagens** (profissões cotidianas, pop culture, figuras históricas, fantásticas, absurdas) e **500 Localizações** (locais urbanos, de trabalho, festas, cômodos, cenários fantásticos e históricos).
 
 ## [0.1.0] — 2026-08-06
 
