@@ -23,9 +23,15 @@ Google Sheets, ou num editor de texto qualquer. Cada linha é um jogo, com estas
 | `aquecimento` | Se é um jogo de aquecimento | `sim` ou `não` |
 | `musica` | Se usa/precisa de música | `sim` ou `não` |
 | `descricao` | As regras do jogo, em texto corrido. Se tiver vírgula dentro do texto, **coloque a descrição toda entre aspas** (veja a linha do "Jogo do Troca" no arquivo como exemplo) | `"Um participante atua como..."` |
+| `visivel` | `sim` = aparece no app, `não` = escondido (exclusão lógica, feita pelo botão de lixeira no app — a linha nunca é apagada de verdade). Editando manualmente, sempre `sim` num jogo novo. | `sim` |
 
-Pra **adicionar um jogo novo**: adiciona uma linha no final do CSV com essas 8 colunas
-preenchidas (`sim`/`não` sempre em minúsculo, sem acento).
+Pra **adicionar um jogo novo**: adiciona uma linha no final do CSV com essas 9 colunas
+preenchidas (`sim`/`não` sempre em minúsculo, sem acento). Ou, mais fácil: usa o botão **"+"**
+no app (pede uma senha de administrador) em vez de editar o CSV na mão.
+
+**Excluir um jogo:** não apague a linha do CSV manualmente — use o ícone de lixeira na carta do
+jogo dentro do app (também com senha). Isso marca a linha como `visivel=não` em vez de apagar,
+mantendo o histórico.
 
 **Tom da descrição:** objetivo e informal, do jeito que se fala no dia a dia. Pode caçoar um
 pouco pra deixar leve. Sem travessão, sem emoji, sem palavra difícil — é pra ler rápido numa

@@ -77,6 +77,16 @@ um), e opcionalmente sorteia um personagem e/ou uma localização pra dar tema �
 13. **Aleatoriedades expandidas**: `data/aleatoriedades.csv` cresceu pra 500 linhas e ganhou
     duas colunas novas — `Filme / Livro` e `Adjetivo / Característica` — cada uma com seu
     próprio botão no overlay do dado (2x2 agora, era 1x2).
+14. **Formulário n8n de cadastro + exclusão de jogo** — workflow
+    `[KEWIN] Joga na Cumbuca - Cadastro de Jogos` criado na `vps-lava` (o conector estava
+    apontando pra VPS errada, cliente reconectou o certo). Cadastro (badge "+") e exclusão
+    lógica (ícone de lixeira na carta do jogo) protegidos por senha, conferida tanto no app
+    (uma vez por sessão) quanto no n8n (a trava de verdade). Ver `01-ARQUITETURA-GERAL.md`.
+    **Falta ativar o workflow** (credencial do GitHub precisa ser criada manualmente no n8n —
+    ver `04-REGISTRO-BUGS.md`) antes de funcionar de ponta a ponta.
+15. **Exclusão lógica de jogo**: nova coluna `visivel` (sim/não) em `jogos.csv`. Jogo excluído
+    nunca é apagado do arquivo, só marcado `visivel=não` e filtrado na carga do app — mantém
+    histórico no Git.
 
 ## Decisões pendentes (aguardando resposta do cliente)
 
@@ -85,11 +95,8 @@ um), e opcionalmente sorteia um personagem e/ou uma localização pra dar tema �
    quer filtro ativo também?
 2. **PWA / instalável** — ainda não implementado. Vale adicionar manifest + funcionamento
    offline (ícone na tela inicial do celular, funciona sem internet numa festa com wifi ruim)?
-3. **Formulário n8n pra cadastrar jogos direto no GitHub** — pedido pelo cliente, **bloqueado**:
-   o conector n8n MCP desta sessão está ligado na VPS da ADN Construtora, não na `vps-lava`
-   (onde vive o workflow "[KEWIN] Quinta Livre" que serviria de referência). Falta o cliente
-   autorizar/conectar o n8n certo pra essa tarefa avançar. Ver `04-REGISTRO-BUGS.md`.
-4. **Botão "+" no canto superior esquerdo** pra abrir esse formulário — depende do item 3.
+3. **Ativar o workflow n8n** — falta criar a credencial do GitHub no n8n e ligar o toggle.
+   Ver passo a passo em `04-REGISTRO-BUGS.md`.
 
 ## Fora do escopo original, mas pedido e implementado
 

@@ -51,26 +51,40 @@ projeto vive dentro do Google Drive, que às vezes trava builds locais por sincr
 contínua. Como este projeto não tem build step, o risco é baixo — só relevante se algum dia
 entrar um bundler/npm aqui.)*
 
-### Conector n8n MCP desta sessão aponta pra VPS errada
+### ~~Conector n8n MCP desta sessão apontava pra VPS errada~~ — resolvido em 2026-08-07
 
-**Sintoma:** cliente pediu um workflow novo em `vps-lava` (n8n da própria agência Lava, onde
-vive o `[KEWIN] Quinta Livre`, ID `sl61e9Qfcq6XdB99` — ver `n8n/vps-lava/clientes/lava-agencia/
-README.md`), pra rodar em paralelo com ele. O conector n8n MCP disponível nesta sessão
-(`search_workflows` sem filtro) retornou workflows da **ADN Construtora**
-(`[ADN] Transferência e Backup de Leads`, `Normalizador de Dados`, etc.) — ou seja, está
-plugado na `vps-adn`, não na `vps-lava`.
+Cliente pediu um workflow novo em `vps-lava` (n8n da própria agência Lava, onde vive o
+`[KEWIN] Quinta Livre`), pra rodar em paralelo com ele. O primeiro conector n8n MCP disponível
+nesta sessão estava plugado na `vps-adn` (ADN Construtora) por engano. O cliente conectou o
+conector certo (`vps-lava`) na sequência e o workflow foi criado normalmente — ver
+`n8n/vps-lava/clientes/lava-agencia/README.md` e `changelog.md`.
 
-**Bloqueia:** criar o workflow de formulário pra cadastro de jogos (ver `02-ESCOPO.md`,
-pendência 3) e o botão "+" no app que linkaria pra ele (pendência 4).
+### Workflow n8n de cadastro/exclusão criado, mas ainda inativo
 
-**Como resolver:** o cliente precisa autorizar/conectar o MCP do n8n certo
-(`vps-lava` — endpoint e token em `n8n/vps-lava/mcp-config.md`) numa sessão que tenha acesso a
-configurar conectores MCP. Depois disso, seguir as regras de `n8n/CLAUDE.md` (exportar backup
-antes de mudança relevante, registrar em `n8n/vps-lava/clientes/lava-agencia/changelog.md`).
+**Sintoma:** o workflow `[KEWIN] Joga na Cumbuca - Cadastro de Jogos` (ID `fGqJEeLlgj2MhpJx`)
+foi criado com sucesso via MCP, incluindo os 4 nós GitHub necessários. Mas a ferramenta MCP não
+consegue **criar credenciais** (só referenciá-las por `newCredential(...)`, que gera um
+placeholder) — então os nós GitHub ficaram sem credencial de verdade atribuída, e o workflow
+não foi ativado (evitar deixar uma automação quebrada "no ar").
+
+**Bloqueia:** os botões "+" (cadastrar) e lixeira (excluir) no app abrem/chamam os endpoints
+certos, mas a gravação no GitHub falha até isso ser resolvido.
+
+**Como resolver** (2 passos manuais no n8n, ~2 minutos):
+1. No n8n (`vps-lava`), abrir o workflow e ir em Credentials > New > **GitHub API**. Colar o
+   token de `_docs/github-cumbuca-criativa.md` (na raiz do `_Dev`). Nomear a credencial
+   `GitHub - Cumbuca Criativa` (mesmo nome que os nós já esperam).
+2. Selecionar essa credencial nos 4 nós GitHub do fluxo ("Buscar jogos.csv Atual", "Salvar
+   jogos.csv no GitHub", "Buscar jogos.csv para Excluir", "Salvar Exclusao no GitHub"), e
+   ativar o workflow (toggle no canto superior direito do editor).
+
+Depois disso, testar uma vez cada fluxo (cadastrar um jogo de teste, depois excluir ele) antes
+de considerar resolvido.
 
 ## Pendências (roadmap curto)
 
-- Workflow n8n de cadastro de jogos + botão "+" no app — bloqueado, ver acima.
+- Ativar o workflow n8n (credencial + toggle) — ver acima. Bloqueia cadastro/exclusão de jogo
+  funcionarem de ponta a ponta.
 - Colunas mediador/aquecimento/música como filtro ativo (hoje só informativo) — aguardando
   confirmação em `02-ESCOPO.md`.
 - PWA/instalável — aguardando confirmação em `02-ESCOPO.md`.

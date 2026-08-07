@@ -52,6 +52,7 @@ Conforme o app crescer, `index.html` provavelmente vai ganhar irmãos `style.css
 | `aquecimento` | `sim`/`não` | Se é um jogo de aquecimento |
 | `musica` | `sim`/`não` | Se o jogo usa/precisa de música |
 | `descricao` | texto (entre aspas se tiver vírgula) | Regras do jogo, mostradas no cartão sorteado |
+| `visivel` | `sim`/`não` | Exclusão lógica. `não` = o jogo continua no arquivo (histórico preservado no Git) mas o app nunca carrega ele (filtrado já no `boot()`). Setado pra `não` pelo webhook de exclusão do formulário admin — nunca precisa mexer nisso manualmente. |
 
 Banco atual: 85 jogos reais (o cliente gerou um lote maior com ajuda do Gemini e depois pediu
 pra remover os que repetiam a mesma premissa — ver `03-CHANGELOG.md` v0.6.1).
@@ -78,6 +79,32 @@ só reembaralha quando esgota todas as opções, e evita repetir de novo o últi
 na emenda entre uma rodada e a próxima. Existe uma sacola por categoria de jogo (chave = nome
 da categoria ou "Todas as Categorias") e uma sacola só pra cada uma das quatro colunas de
 `aleatoriedades.csv`.
+
+## Administração: cadastrar e excluir jogo (n8n)
+
+O app continua "sem backend" pra leitura (CSV estático), mas cadastro/exclusão de jogo passam
+por um workflow n8n na `vps-lava` — **`[KEWIN] Joga na Cumbuca - Cadastro de Jogos`**
+(ID `fGqJEeLlgj2MhpJx`, ver `n8n/vps-lava/clientes/lava-agencia/` na raiz do `_Dev`). Dois
+gatilhos no mesmo workflow, os dois exigem a senha `!admin123` **conferida do lado do
+servidor** antes de gravar qualquer coisa (a senha também é conferida no app, mas isso é só
+conveniência — não é a trava de segurança de verdade):
+
+- **Cadastrar** (badge "+", canto superior esquerdo): pede a senha no app (uma vez por sessão,
+  guardada em `sessionStorage`), depois abre em nova aba o formulário n8n
+  (`.../form/9b2cd1a6-...`), que tem seus próprios campos + senha. Ao enviar, o n8n busca o
+  `jogos.csv` atual no GitHub, calcula o próximo `id`, monta a linha (com `visivel=sim`) e
+  comita.
+- **Excluir** (ícone de lixeira, canto inferior direito da carta do jogo): pede a senha (mesma
+  trava de sessão), mostra confirmação Sim/Não, e no "Sim" chama o webhook do n8n via
+  `fetch()` (`POST .../joga-na-cumbuca-excluir`, body `{ id, senha }`). O n8n confere a senha,
+  muda `visivel` daquele `id` pra `não` no CSV e comita — a linha nunca é apagada de verdade
+  (fica no histórico do Git). No app, o jogo some da lista local imediatamente (otimista, antes
+  do redeploy do GitHub Pages terminar).
+
+**Status:** workflow criado mas **inativo** — falta (1) criar a credencial `GitHub API` no n8n
+com o token de `_docs/github-cumbuca-criativa.md` e atribuir aos 4 nós GitHub do fluxo, e
+(2) ativar o workflow. Até isso acontecer, os botões "+"/lixeira abrem os fluxos certos mas a
+gravação no GitHub falha. Ver `04-REGISTRO-BUGS.md`.
 
 ## Decisões técnicas em aberto
 

@@ -20,6 +20,12 @@
     <img src="assets/img/lupa.svg" alt="">
   </button>
 
+  <a class="add-badge" id="add-badge"
+     href="https://lava-automations-n8n.tgervl.easypanel.host/form/9b2cd1a6-7863-44ce-a7cf-7817164b12ed"
+     target="_blank" rel="noopener" aria-label="Cadastrar jogo novo">
+    <img src="assets/img/mais.svg" alt="">
+  </a>
+
   <div class="screens" id="screens">
 
     <!-- 1 — Tela Inicial -->
@@ -53,6 +59,9 @@
     <section class="screen" id="screen-jogo">
       <div class="ticket-card card--verde">
         <span class="game-id" id="game-id"></span>
+        <button class="delete-badge" id="btn-excluir-jogo" aria-label="Excluir jogo">
+          <img src="assets/img/lixeira.svg" alt="">
+        </button>
         <div class="card-inner">
           <div class="game-card-body" id="game-card-body">
             <h1 class="game-title" id="game-title"></h1>
@@ -135,6 +144,30 @@
       </div>
       <p class="search-overlay__hint" id="search-hint">Digite o nome de um jogo, categoria ou palavra da regra.</p>
       <ul class="game-list search-overlay__results" id="search-results"></ul>
+    </div>
+  </div>
+
+  <div class="admin-overlay" id="admin-overlay">
+    <form class="admin-overlay__panel" id="admin-form">
+      <div class="dice-overlay__head">
+        <img src="assets/img/mais.svg" alt="">
+        <h2>Área de administração</h2>
+        <button type="button" class="dice-overlay__close" id="admin-overlay-close" aria-label="Fechar">X</button>
+      </div>
+      <p class="admin-overlay__hint">Só pede uma vez por sessão.</p>
+      <input type="password" id="admin-input" placeholder="Senha" autocomplete="off" required>
+      <p class="admin-overlay__erro is-hidden" id="admin-erro">Senha incorreta. Tenta de novo.</p>
+      <button type="submit" class="btn btn--accent btn--w106">ENTRAR</button>
+    </form>
+  </div>
+
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-overlay__panel">
+      <p id="confirm-texto"></p>
+      <div class="btn-row">
+        <button class="btn btn--dark btn--w106" id="confirm-nao">NÃO</button>
+        <button class="btn btn--accent btn--w106" id="confirm-sim">SIM</button>
+      </div>
     </div>
   </div>
 

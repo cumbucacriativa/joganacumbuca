@@ -371,6 +371,113 @@ document.getElementById('btn-aleatorio').addEventListener('click', () => {
 
 document.getElementById('btn-fechar-lista').addEventListener('click', () => goTo('screen-categoria'));
 
+/* ---------- Admin: senha (uma vez por sessão), cadastro e exclusão de jogo ---------- */
+/* A senha aqui é só uma trava de conveniência no app — qualquer um vendo o código-fonte
+   acha ela. A trava de verdade é no n8n: tanto o formulário de cadastro quanto o webhook
+   de exclusão conferem a mesma senha do lado do servidor antes de gravar qualquer coisa
+   no GitHub, então mesmo pulando essa tela ninguém escreve no jogos.csv sem a senha certa. */
+
+const ADMIN_SENHA = '!admin123';
+const ADD_FORM_URL = 'https://lava-automations-n8n.tgervl.easypanel.host/form/9b2cd1a6-7863-44ce-a7cf-7817164b12ed';
+const DELETE_WEBHOOK_URL = 'https://lava-automations-n8n.tgervl.easypanel.host/webhook/4bd6eeb9-f48a-4bc7-891a-77d002b1e2f9/joga-na-cumbuca-excluir';
+
+const admOk = () => sessionStorage.getItem('jncAdmin') === '1';
+const admMarcarOk = () => sessionStorage.setItem('jncAdmin', '1');
+
+const adminOverlayEl = document.getElementById('admin-overlay');
+const adminInputEl = document.getElementById('admin-input');
+const adminErroEl = document.getElementById('admin-erro');
+let adminCallback = null;
+
+function pedirSenha(aoConfirmar) {
+  if (admOk()) { aoConfirmar(); return; }
+  adminCallback = aoConfirmar;
+  adminErroEl.classList.add('is-hidden');
+  adminInputEl.value = '';
+  adminOverlayEl.classList.add('is-open');
+  setTimeout(() => adminInputEl.focus(), 250);
+}
+function fecharAdmin() {
+  adminOverlayEl.classList.remove('is-open');
+  adminCallback = null;
+}
+
+document.getElementById('admin-overlay-close').addEventListener('click', fecharAdmin);
+document.getElementById('admin-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (adminInputEl.value === ADMIN_SENHA) {
+    admMarcarOk();
+    const cb = adminCallback;
+    fecharAdmin();
+    if (cb) cb();
+  } else {
+    adminErroEl.classList.remove('is-hidden');
+    adminInputEl.value = '';
+    adminInputEl.focus();
+  }
+});
+
+document.getElementById('add-badge').addEventListener('click', (e) => {
+  e.preventDefault();
+  pedirSenha(() => window.open(ADD_FORM_URL, '_blank', 'noopener'));
+});
+
+const confirmOverlayEl = document.getElementById('confirm-overlay');
+const confirmTextoEl = document.getElementById('confirm-texto');
+let confirmCallback = null;
+
+function pedirConfirmacao(texto, aoConfirmar) {
+  confirmTextoEl.textContent = texto;
+  confirmCallback = aoConfirmar;
+  confirmOverlayEl.classList.add('is-open');
+}
+function fecharConfirmacao() {
+  confirmOverlayEl.classList.remove('is-open');
+  confirmCallback = null;
+}
+document.getElementById('confirm-sim').addEventListener('click', () => {
+  const cb = confirmCallback;
+  fecharConfirmacao();
+  if (cb) cb();
+});
+document.getElementById('confirm-nao').addEventListener('click', fecharConfirmacao);
+
+const btnExcluirEl = document.getElementById('btn-excluir-jogo');
+btnExcluirEl.addEventListener('click', () => {
+  if (!state.jogoAtual) return;
+  pedirSenha(() => {
+    pedirConfirmacao(`Excluir "${state.jogoAtual.jogo}" da lista? Some do app, mas fica registrado no histórico do GitHub.`, excluirJogoAtual);
+  });
+});
+
+async function excluirJogoAtual() {
+  const jogo = state.jogoAtual;
+  if (!jogo) return;
+  btnExcluirEl.disabled = true;
+  try {
+    const res = await fetch(DELETE_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: jogo.id, senha: ADMIN_SENHA }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.ok) {
+      state.jogos = state.jogos.filter((j) => j.id !== jogo.id);
+      state.categorias = [TODAS, ...new Set(state.jogos.map((j) => j.categoria).filter(Boolean))];
+      selectEl.innerHTML = state.categorias.map((c) => `<option value="${c}">${c}</option>`).join('');
+      sacolasDeJogos.clear();
+      renderLista();
+      goTo('screen-lista');
+    } else {
+      alert('Não consegui excluir agora. Tenta de novo em alguns segundos.');
+    }
+  } catch (err) {
+    alert('Não consegui excluir agora — confere sua internet e tenta de novo.');
+  } finally {
+    btnExcluirEl.disabled = false;
+  }
+}
+
 /* ---------- Rodapé: carrossel infinito (metade duplicada p/ loop sem emenda) ---------- */
 /* Cada cartinha é clicável: "voa" até o centro, gira, e abre um jogo aleatório
    de TODAS as categorias — um easter egg sem função prática, só para dar vontade
@@ -465,8 +572,9 @@ async function boot() {
     fetchCSV('data/aleatoriedades.csv'),
   ]);
 
-  state.jogos = jogos;
-  state.categorias = [TODAS, ...new Set(jogos.map((j) => j.categoria).filter(Boolean))];
+  // "visivel=não" é exclusão lógica (feita pelo formulário de admin) — nunca aparece no app
+  state.jogos = jogos.filter((j) => j.visivel !== 'não');
+  state.categorias = [TODAS, ...new Set(state.jogos.map((j) => j.categoria).filter(Boolean))];
   state.personagens = aleatorio.map((r) => r.Personagem).filter(Boolean);
   state.locais = aleatorio.map((r) => r.Localizacao).filter(Boolean);
   state.filmes = aleatorio.map((r) => r['Filme / Livro']).filter(Boolean);

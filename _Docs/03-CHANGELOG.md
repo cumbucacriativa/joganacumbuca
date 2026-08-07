@@ -2,6 +2,32 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
+## [0.8.0] — 2026-08-07
+
+### Adicionado
+- **Cadastro e exclusão de jogo via n8n**, protegidos por senha de administrador
+  (`!admin123`):
+  - Badge **"+"** (canto superior esquerdo, todas as telas) — pede a senha uma vez por sessão
+    (`sessionStorage`), depois abre o formulário n8n de cadastro numa nova aba.
+  - Ícone de **lixeira** (canto inferior direito da carta do jogo sorteado) — pede a senha (uma
+    vez por sessão), mostra confirmação Sim/Não, e chama um webhook n8n que faz a exclusão.
+  - **Exclusão é lógica, não física**: nova coluna `visivel` (sim/não) em `data/jogos.csv`.
+    Excluir marca `visivel=não` — a linha nunca é apagada do arquivo (fica no histórico do
+    Git), só filtrada na carga do app.
+  - Senha conferida nos dois lados: no app (conveniência, evita clique acidental) e no n8n
+    (a trava de verdade — o form de cadastro e o webhook de exclusão só gravam no GitHub se a
+    senha bater do lado do servidor).
+  - Workflow n8n `[KEWIN] Joga na Cumbuca - Cadastro de Jogos` (`vps-lava`, ID
+    `fGqJEeLlgj2MhpJx`) — dois gatilhos (Form Trigger de cadastro + Webhook de exclusão), cada
+    um com seu próprio par Get/Edit File do GitHub. Detalhe completo em
+    `01-ARQUITETURA-GERAL.md`.
+
+### Pendente
+- Workflow n8n criado mas **não ativado** — falta criar a credencial do GitHub manualmente no
+  n8n (a ferramenta usada pra montar o fluxo não cria credenciais, só referencia) e ligar o
+  toggle. Até lá, cadastro/exclusão abrem a UI certa mas a gravação falha. Passo a passo em
+  `04-REGISTRO-BUGS.md`.
+
 ## [0.7.0] — 2026-08-07
 
 ### Adicionado
