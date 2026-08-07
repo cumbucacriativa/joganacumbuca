@@ -112,8 +112,9 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 ## [0.5.0] — 2026-08-07
 
 ### Adicionado
+- **Favicon**: Configurado o SVG do dado (`assets/img/dado.svg`) como favicon no `index.html`.
 - **93 jogos de improviso teatral reais** cadastrados em `data/jogos.csv` (pesquisados em bibliotecas internacionais e nacionais de teatro e improviso), organizados nas 4 categorias centrais (`Duplas`, `Trios`, `Grupos`, `Todos`).
-- **Expansão massiva do banco de aleatoriedades** (`data/aleatoriedades.csv`) com **500 linhas completas** distribuídas em 5 colunas independentes: **Personagem**, **Localizacao**, **Filme / Livro**, **Adjetivo / Característica** e **Frase** (frases de diálogo curtas, aleatórias e cômicas).
+- **Expansão massiva do banco de aleatoriedades** (`data/aleatoriedades.csv`) com **500 linhas completas** distribuídas em 5 colunas independentes: **Personagem**, **Localizacao**, **Filme / Livro**, **Adjetivo / Característica** e **Frase**.
 
 ## [0.1.0] — 2026-08-06
 
