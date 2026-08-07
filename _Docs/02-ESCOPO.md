@@ -54,25 +54,36 @@ um), e opcionalmente sorteia um personagem e/ou uma localização pra dar tema �
 5. **Publicação no GitHub Pages** — repositório `cumbucacriativa/joganacumbuca` (conta GitHub
    da Cumbuca Criativa) recebeu o push e o GitHub Pages foi ativado. Site no ar em
    https://cumbucacriativa.github.io/joganacumbuca/. Ver `04-REGISTRO-BUGS.md`.
+6. **Ícones/ornamentos redesenhados à mão substituídos pelos SVGs reais** — cliente apontou que
+   ficaram errados; refeito usando os arquivos exportados do XD como fundo das cartas. Ver
+   `03-CHANGELOG.md` v0.3.0.
+7. **Ícone de música** — cliente exportou; implementado na legenda da lista, na lista de jogos
+   e como tag "Precisa de música" no cartão do jogo. Ver v0.4.0.
+8. **Botão "+ OPÇÕES"** — confirmado pelo cliente: leva de volta pra lista de jogos (filtrada
+   pela categoria do jogo atual).
 
 ## Decisões pendentes (aguardando resposta do cliente)
 
-1. **Botão "+ OPÇÕES"** (tela 3, cartão do jogo sorteado) — implementado como placeholder sem
-   função ainda (visível, mas não faz nada ao clicar) até saber o que ele deve abrir.
-2. **Colunas mediador/aquecimento/música** — implementadas como selos informativos (cartão do
+1. **Colunas mediador/aquecimento/música** — implementadas como selos informativos (cartão do
    jogo + legenda da lista), sem filtro ativo. Confirma que é só informativo por enquanto, ou
    quer filtro ativo também?
-3. **Sorteio de jogo** — implementado permitindo repetir o mesmo jogo duas vezes seguidas
+2. **Sorteio de jogo** — implementado permitindo repetir o mesmo jogo duas vezes seguidas
    (mais simples). Muda pra "não repete até esgotar a lista da categoria" se preferir.
-4. **PWA / instalável** — ainda não implementado. Vale adicionar manifest + funcionamento
+3. **PWA / instalável** — ainda não implementado. Vale adicionar manifest + funcionamento
    offline (ícone na tela inicial do celular, funciona sem internet numa festa com wifi ruim)?
-5. **Quem edita os CSVs depois de prontos** — só o Kewin (via git/planilha) ou alguém sem
+4. **Quem edita os CSVs depois de prontos** — só o Kewin (via git/planilha) ou alguém sem
    perfil técnico vai mexer? Se for o segundo caso, talvez valha uma telinha admin simples em
-   vez de editar CSV cru.
-6. **Categoria e descrição dos 4 jogos de exemplo sem confirmação** (Musical, Congela, Medusa,
+   vez de editar CSV cru. Enquanto isso, passo a passo pra edição manual está no `README.md`.
+5. **Categoria e descrição dos 4 jogos de exemplo sem confirmação** (Musical, Congela, Medusa,
    Círculo da Conexão) — só "Jogo do Troca" teve categoria e descrição confirmadas pelo design.
    Os outros usam "Trios" como placeholder estrutural e descrição em aberto — ver nota em
    `01-ARQUITETURA-GERAL.md`. Isso é só para os 5 jogos de exemplo; a planilha real do cliente
    vai substituir tudo.
 
-Assim que essas respostas chegarem, este documento deve ser atualizado.
+## Fora do escopo original, mas pedido e implementado
+
+- **Easter egg no carrossel do rodapé**: clicar numa cartinha sorteia um jogo de todas as
+  categorias com uma animação de "voo até o centro + giro". Sem função prática — só engajamento
+  lúdico. Ver `03-CHANGELOG.md` v0.4.0.
+
+Assim que as pendências acima forem respondidas, este documento deve ser atualizado.

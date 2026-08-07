@@ -46,6 +46,22 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 - Categoria/descrição de 4 dos 5 jogos de exemplo é placeholder (ver `02-ESCOPO.md`).
 - PWA/offline e filtro ativo por mediador/aquecimento/música — ver `02-ESCOPO.md`.
 
+## [0.4.0] — 2026-08-07
+
+### Adicionado
+- **Ícone de música** (`icone musica.svg`, exportado pelo cliente) — agora aparece na legenda
+  da lista ("Precisa de Música"), na própria lista de jogos, e como tag "Precisa de música" no
+  cartão do jogo sorteado.
+- **Easter egg no rodapé**: clicar numa cartinha do carrossel faz ela "voar" até o centro da
+  tela, girar e abrir um jogo aleatório de **todas** as categorias — sem função prática, só
+  para dar vontade de clicar. As cartas do rodapé têm um pequeno balanço/pulo espaçado (uma a
+  cada poucos segundos, defasado entre elas) convidando o toque. Fallback embutido: se a
+  animação não disparar o evento de término (ex: aba em segundo plano), um timer garante que a
+  tela troca do mesmo jeito.
+- **README** reescrito com passo a passo prático: como adicionar um jogo no CSV, como testar
+  localmente, como publicar (`git add`/`commit`/`push`) e quanto tempo o GitHub Pages leva
+  pra atualizar.
+
 ## [0.3.0] — 2026-08-07
 
 Refação do visual depois do cliente apontar que "todos os SVGs estão bugados".

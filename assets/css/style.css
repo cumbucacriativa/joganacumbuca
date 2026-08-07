@@ -96,15 +96,46 @@ body {
   width: max-content;
   animation: carousel-scroll 42s linear infinite;
 }
-.footer-carousel__track img {
+.footer-carousel__track.is-paused { animation-play-state: paused; }
+
+.footer-card {
   width: 29.8cqw;
   flex: none;
   margin-right: -11.6cqw;
   display: block;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  animation: footer-hop 8s ease-in-out infinite;
+  animation-delay: var(--hop-delay, 0s);
+}
+.footer-card img { width: 100%; display: block; pointer-events: none; }
+.footer-card:active { transform: scale(.93); }
+
+@keyframes footer-hop {
+  0%, 87%, 100% { transform: translateY(0) rotate(0deg); }
+  91% { transform: translateY(-7%) rotate(-3deg); }
+  94% { transform: translateY(1%) rotate(2deg); }
 }
 @keyframes carousel-scroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
+}
+
+/* clone que "voa" do rodapé até o centro da tela ao clicar numa carta */
+.footer-flight {
+  position: fixed;
+  z-index: 100;
+  display: block;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-card { animation: none; }
 }
 
 /* ============ Telas + transição de carta girando ============ */

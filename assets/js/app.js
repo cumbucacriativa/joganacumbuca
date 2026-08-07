@@ -120,6 +120,8 @@ function renderJogo(jogo) {
     tags.push('<span class="tag"><img src="assets/img/tag-mediador.svg" alt="">Mediador</span>');
   if (jogo.aquecimento === 'sim')
     tags.push('<span class="tag"><img src="assets/img/tag-aquecimento.svg" alt="">Aquecimento</span>');
+  if (jogo.musica === 'sim')
+    tags.push('<span class="tag"><img src="assets/img/tag-musica.svg" alt="">Precisa de música</span>');
   gameTagsEl.innerHTML = tags.join('');
 
   gameDescEl.textContent = jogo.descricao || '';
@@ -142,6 +144,7 @@ function renderLista() {
     const icons = [];
     if (j.aquecimento === 'sim') icons.push('<img src="assets/img/tag-aquecimento.svg" alt="Aquecimento">');
     if (j.mediador === 'sim') icons.push('<img src="assets/img/tag-mediador.svg" alt="Mediador">');
+    if (j.musica === 'sim') icons.push('<img src="assets/img/tag-musica.svg" alt="Precisa de música">');
     if (j.participantes) icons.push(`${j.participantes}<img src="assets/img/tag-participantes.svg" alt="Participantes">`);
     return `<li data-jogo="${j.jogo}"><span>${j.jogo}</span><span class="game-list__icons">${icons.join('')}</span></li>`;
   }).join('');
@@ -229,12 +232,87 @@ document.getElementById('btn-aleatorio').addEventListener('click', () => {
 document.getElementById('btn-fechar-lista').addEventListener('click', () => goTo('screen-categoria'));
 
 /* ---------- Rodapé: carrossel infinito (metade duplicada p/ loop sem emenda) ---------- */
+/* Cada cartinha é clicável: "voa" até o centro, gira, e abre um jogo aleatório
+   de TODAS as categorias — um easter egg sem função prática, só para dar vontade
+   de clicar (por isso o balanço com frequência baixa em cada carta). */
+
+const footerTrackEl = document.getElementById('footer-track');
+let footerFlightBusy = false;
 
 function buildFooter() {
-  const track = document.getElementById('footer-track');
   const half = 10;
-  track.innerHTML = Array.from({ length: half * 2 },
-    () => '<img src="assets/img/carta-rodape.svg" alt="">').join('');
+  footerTrackEl.innerHTML = Array.from({ length: half * 2 }, (_, i) => {
+    const delay = ((i * 37) % 97) / 10; // atraso pseudo-aleatório por carta, em segundos
+    return `<button class="footer-card" type="button" aria-label="Sortear um jogo surpresa" style="--hop-delay:-${delay}s"><img src="assets/img/carta-rodape.svg" alt=""></button>`;
+  }).join('');
+}
+
+footerTrackEl.addEventListener('click', (e) => {
+  const card = e.target.closest('.footer-card');
+  if (card) abrirCartaSurpresa(card);
+});
+
+function abrirCartaSurpresa(cardEl) {
+  if (footerFlightBusy || !state.jogos.length) return;
+  footerFlightBusy = true;
+
+  // sorteia agora (de todas as categorias), pra já ter o conteúdo pronto quando a carta virar
+  sortearJogo(TODAS);
+
+  const startRect = cardEl.getBoundingClientRect();
+
+  // mede onde a carta do jogo vai parar sem mostrar a troca de tela ainda
+  const jogoScreen = document.getElementById('screen-jogo');
+  const wasActive = activeScreen;
+  jogoScreen.style.visibility = 'hidden';
+  jogoScreen.classList.add('is-active');
+  const endRect = jogoScreen.querySelector('.ticket-card').getBoundingClientRect();
+  jogoScreen.classList.remove('is-active');
+  jogoScreen.style.visibility = '';
+  if (wasActive !== jogoScreen) wasActive.classList.add('is-active');
+
+  footerTrackEl.classList.add('is-paused');
+
+  const flight = document.createElement('img');
+  flight.src = 'assets/img/carta-rodape.svg';
+  flight.className = 'footer-flight';
+  flight.style.left = startRect.left + 'px';
+  flight.style.top = startRect.top + 'px';
+  flight.style.width = startRect.width + 'px';
+  flight.style.height = startRect.height + 'px';
+  document.body.appendChild(flight);
+
+  const dx = (endRect.left + endRect.width / 2) - (startRect.left + startRect.width / 2);
+  const dy = (endRect.top + endRect.height / 2) - (startRect.top + startRect.height / 2);
+  const sx = endRect.width / startRect.width;
+  const sy = endRect.height / startRect.height;
+
+  const anim = flight.animate([
+    { transform: 'translate(0px,0px) scale(1,1) rotateY(0deg)', offset: 0 },
+    { transform: `translate(${dx * .55}px, ${(dy * .55) - startRect.height * .25}px) scale(${1 + (sx - 1) * .55}, ${1 + (sy - 1) * .55}) rotateY(80deg)`, offset: .55 },
+    { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy}) rotateY(90deg)`, offset: 1 },
+  ], { duration: 560, easing: 'cubic-bezier(.3,0,.15,1)' });
+
+  let landed = false;
+  const pousar = () => {
+    if (landed) return;
+    landed = true;
+    flight.remove();
+    footerTrackEl.classList.remove('is-paused');
+
+    // a carta voadora já girou até de perfil (90°) — a tela de jogo só completa o giro
+    flipTimers.forEach(clearTimeout);
+    flipTimers = [];
+    wasActive.classList.remove('is-active', 'is-flip-out', 'is-flip-in');
+    jogoScreen.classList.add('is-active', 'is-flip-in');
+    activeScreen = jogoScreen;
+    flipTimers.push(setTimeout(() => jogoScreen.classList.remove('is-flip-in'), IN_MS));
+
+    footerFlightBusy = false;
+  };
+  // reforço: se a aba estiver em segundo plano (rAF pausado), garante o pouso mesmo assim
+  anim.onfinish = pousar;
+  setTimeout(pousar, 900);
 }
 
 /* ---------- Boot ---------- */
