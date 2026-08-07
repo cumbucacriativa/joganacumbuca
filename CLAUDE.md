@@ -27,6 +27,11 @@ arquitetura, escopo ou dados.
   pasta que já causou problemas de build por sincronização em outros projetos (ver
   `_Docs/04-REGISTRO-BUGS.md`). Como aqui não há build step, o risco é baixo, mas vale lembrar
   se algum dia entrar um bundler/npm.
+- **Tom de voz do conteúdo que vai pro app** (descrição de jogos no CSV, textos/copy da
+  interface): objetivo, informal, do jeito que se fala no dia a dia. Pode ter piadinha leve
+  pra descontrair. Nunca usar travessão (—) nem emoji. Evitar linguagem técnica — é pra quem
+  tá numa festa ou ensaio, não pra desenvolvedor. Essa regra é sobre o conteúdo do produto, não
+  sobre a documentação técnica em `_Docs/`.
 
 ## Índice de documentos
 

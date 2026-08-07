@@ -26,6 +26,10 @@ Google Sheets, ou num editor de texto qualquer. Cada linha é um jogo, com estas
 Pra **adicionar um jogo novo**: adiciona uma linha no final do CSV com essas 7 colunas
 preenchidas (`sim`/`não` sempre em minúsculo, sem acento).
 
+**Tom da descrição:** objetivo e informal, do jeito que se fala no dia a dia. Pode caçoar um
+pouco pra deixar leve. Sem travessão, sem emoji, sem palavra difícil — é pra ler rápido numa
+festa, não pra impressionar ninguém.
+
 Os personagens e localizações do "dado" (ícone do topo) ficam em
 [`data/aleatoriedades.csv`](data/aleatoriedades.csv) — duas colunas, `Personagem` e
 `Localizacao`, independentes uma da outra (não precisam ter a mesma quantidade de linhas).
