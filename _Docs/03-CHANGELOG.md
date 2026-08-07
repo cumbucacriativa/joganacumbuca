@@ -2,6 +2,12 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
+## [0.5.0] — 2026-08-07
+
+### Adicionado
+- **21 jogos de improviso teatral reais** cadastrados em `data/jogos.csv` organizados em 5 categorias principais (`Aquecimento`, `Duplas`, `Trios`, `Grupos`, `Todos`), com descrições revisadas, regras claras e padronização da figura do "mediador".
+- **Expansão massiva do banco de aleatoriedades** (`data/aleatoriedades.csv`) com 60 combinações de personagens (cotidianos, pop culture, figuras históricas, fantásticos) e localizações (cotidianas, eventos sociais, absurdas/fantásticas).
+
 ## [0.1.0] — 2026-08-06
 
 ### Adicionado
