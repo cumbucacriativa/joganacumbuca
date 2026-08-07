@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Joga na Cumbuca</title>
+<meta name="description" content="Cartas aleatórias para jogos de improviso.">
+<meta name="theme-color" content="#0b0f0e">
+<style>
+  :root {
+    --accent: #00ffaa;
+    --bg: #0b0f0e;
+    --bg-card: #141b19;
+    --text: #f4f6f5;
+    --text-muted: #9aa8a4;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+  }
+  body {
+    background: radial-gradient(circle at 50% -10%, #163229 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    padding: 24px;
+    text-align: center;
+  }
+  .logo {
+    width: min(70vw, 320px);
+    height: auto;
+    margin-bottom: 32px;
+  }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(0, 255, 170, 0.15);
+    border-radius: 20px;
+    padding: 28px 24px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(0, 255, 170, 0.1);
+    border: 1px solid rgba(0, 255, 170, 0.3);
+    border-radius: 999px;
+    padding: 6px 14px;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: 22px;
+    margin: 0 0 8px;
+  }
+  p {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .dice {
+    margin-top: 20px;
+    font-size: 28px;
+    animation: spin 3.5s ease-in-out infinite;
+    display: inline-block;
+  }
+  @keyframes spin {
+    0%, 70%, 100% { transform: rotate(0deg); }
+    80% { transform: rotate(180deg); }
+    90% { transform: rotate(340deg); }
+  }
+</style>
+</head>
+<body>
+  <img class="logo" src="assets/logo.svg" alt="Joga na Cumbuca">
+  <div class="card">
+    <span class="badge">Em construção</span>
+    <h1>A cumbuca tá sendo preparada</h1>
+    <p>Cartas de jogos de improviso, personagens e localizações aleatórias — tudo pronto pra
+      abrir no celular na próxima roda. Voltamos em breve.</p>
+    <span class="dice" aria-hidden="true">🎲</span>
+  </div>
+</body>
+</html>
