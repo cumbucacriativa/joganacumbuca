@@ -2,10 +2,22 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
+## [0.6.0] — 2026-08-07
+
+### Adicionado
+- **Busca por texto**: ícone de lupa no canto superior direito (todas as telas), abre um
+  painel que desce do topo com um campo de busca. Filtra por nome do jogo, categoria ou
+  qualquer trecho da descrição/regra, sem acento (buscar "musica" acha "Música"). Clicar num
+  resultado abre a carta do jogo direto. Só um painel fica aberto por vez — abrir a busca
+  fecha o dado, e vice-versa.
+- `assets/img/lupa.svg` — ícone novo, não vem do design do XD (funcionalidade não existia no
+  protótipo original). Criado do zero seguindo o mesmo estilo visual do ícone de dado (contorno
+  simples, cor accent). Ver nota em `05-DESIGN-VISUAL.md`.
+
 ## [0.5.0] — 2026-08-07
 
 ### Adicionado
-- **43 jogos de improviso teatral reais** cadastrados em `data/jogos.csv` (incluindo 10 jogos clássicos inspirados no formato do programa *Improvável*, renomeados e adaptados sem marca registrada), organizados nas 4 categorias centrais (`Duplas`, `Trios`, `Grupos`, `Todos`).
+- **93 jogos de improviso teatral reais** cadastrados em `data/jogos.csv` (pesquisados em bibliotecas internacionais e nacionais de teatro e improviso, como Viola Spolin, Keith Johnstone e Improv Encyclopedia), sem repetição, organizados nas 4 categorias centrais (`Duplas`, `Trios`, `Grupos`, `Todos`).
 - **Expansão massiva do banco de aleatoriedades** (`data/aleatoriedades.csv`) com 60 combinações de personagens (cotidianos, pop culture, figuras históricas, fantásticos) e localizações (cotidianas, eventos sociais, absurdas/fantásticas).
 
 ## [0.1.0] — 2026-08-06

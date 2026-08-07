@@ -39,10 +39,14 @@ desenhar.
 | `dado.svg` | `1.1 - Botão Aleatório/dado.svg` |
 | `btn-shuffle.svg` | `3 - Tela de Jogo/botão sortear apenas ícone.svg` |
 | `seta-cima.svg` / `seta-baixo.svg` | `2 - Tela de Categorias/seta pra cima\|baixo.svg` |
-| `tag-aquecimento.svg` / `tag-mediador.svg` / `tag-participantes.svg` | `4 - Lista de Jogos/ícone *.svg` |
+| `tag-aquecimento.svg` / `tag-mediador.svg` / `tag-participantes.svg` / `tag-musica.svg` | `4 - Lista de Jogos/ícone *.svg` |
 
-**Faltando:** ícone de música (aparece na linha "Musical" da tela de lista no protótipo, mas
-não foi exportado). Enquanto não vier, a coluna `musica` do CSV não exibe ícone.
+**Ícones sem referência no XD** (funcionalidades que não existiam no protótipo original —
+criados do zero, seguindo o mesmo estilo visual dos ícones exportados, mas sem um arquivo do
+cliente pra copiar):
+
+- `lupa.svg` — ícone de busca (canto superior direito, badge escuro com contorno accent, mesmo
+  estilo do badge do dado). Se o cliente exportar uma versão oficial do XD depois, trocar aqui.
 
 **Como as cartas são montadas:** cada carta usa o SVG exportado inteiro como `background-image`
 (via `background-size: 100% 100%`), então ornamentos, borda dupla, pontinhos e o ícone de
