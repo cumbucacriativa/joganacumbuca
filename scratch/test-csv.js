@@ -22,16 +22,18 @@ function parseCSV(text) {
   if (field !== '' || row.length) { row.push(field); rows.push(row); }
 
   const header = rows.shift().map((h) => h.trim());
-  return rows
-    .filter((r) => r.some((v) => v.trim() !== ''))
-    .map((r) => Object.fromEntries(header.map((h, i) => [h, (r[i] || '').trim()])));
+  return {
+    header,
+    rows: rows
+      .filter((r) => r.some((v) => v.trim() !== ''))
+      .map((r) => Object.fromEntries(header.map((h, i) => [h, (r[i] || '').trim()])))
+  };
 }
 
-const jogosCSV = fs.readFileSync(__dirname + '/../data/jogos.csv', 'utf8');
-const jogos = parseCSV(jogosCSV);
-console.log(`Jogos carregados: ${jogos.length}`);
-console.log('Categorias encontradas:', [...new Set(jogos.map(j => j.categoria))]);
-
 const aleatCSV = fs.readFileSync(__dirname + '/../data/aleatoriedades.csv', 'utf8');
-const aleat = parseCSV(aleatCSV);
-console.log(`Aleatoriedades carregadas: ${aleat.length} linhas`);
+const { header, rows } = parseCSV(aleatCSV);
+
+console.log('Headers:', header);
+console.log(`Total de linhas carregadas: ${rows.length}`);
+console.log('Primeira linha:', rows[0]);
+console.log('Última linha:', rows[rows.length - 1]);
