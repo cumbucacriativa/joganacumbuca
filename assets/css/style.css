@@ -314,6 +314,17 @@ body {
 
 /* ============ Tela 3 — jogo sorteado ============ */
 
+.game-id {
+  position: absolute;
+  top: 6.5cqw;
+  left: 8cqw;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 3cqw;
+  opacity: .6;
+  letter-spacing: .04em;
+}
+
 .game-card-body {
   display: flex;
   flex-direction: column;
@@ -507,8 +518,8 @@ body {
   border: none;
   margin: 0 0 3cqw;
 }
-.dice-overlay__cols { display: flex; gap: 6cqw; }
-.dice-overlay__col { flex: 1; text-align: left; min-width: 0; }
+.dice-overlay__cols { display: grid; grid-template-columns: 1fr 1fr; gap: 4cqw 6cqw; }
+.dice-overlay__col { text-align: left; min-width: 0; }
 .dice-overlay__col > span {
   display: block;
   font-family: 'Libre Franklin', sans-serif;

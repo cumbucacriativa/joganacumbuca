@@ -32,6 +32,13 @@ arquitetura, escopo ou dados.
   pra descontrair. Nunca usar travessão (—) nem emoji. Evitar linguagem técnica — é pra quem
   tá numa festa ou ensaio, não pra desenvolvedor. Essa regra é sobre o conteúdo do produto, não
   sobre a documentação técnica em `_Docs/`.
+- **Antes de editar `data/jogos.csv` ou `data/aleatoriedades.csv`, sempre checar sincronia com
+  o GitHub primeiro:** `git fetch origin` e comparar `HEAD..origin/main` (GitHub à frente) e
+  `origin/main..HEAD` (local à frente) antes de mexer. O cliente edita esses CSVs direto (às
+  vezes por outra sessão de IA, às vezes manualmente), então presumir que o arquivo local é a
+  versão mais recente é o jeito mais fácil de apagar trabalho dele sem querer. Se os dois
+  lados tiverem mudanças divergentes, avisar o usuário antes de decidir como reconciliar —
+  não sobrescrever silenciosamente.
 
 ## Índice de documentos
 

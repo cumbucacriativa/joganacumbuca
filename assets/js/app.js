@@ -40,13 +40,77 @@ const state = {
   categorias: [TODAS],
   personagens: [],
   locais: [],
+  filmes: [],
+  adjetivos: [],
   catIndex: 0,
   jogoAtual: null,
   filtroLista: TODAS,
 };
 
-const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const jogosDe = (cat) => (!cat || cat === TODAS ? state.jogos : state.jogos.filter((j) => j.categoria === cat));
+
+/* ---------- Sacola: sorteia sem repetir até esgotar todas as opções ---------- */
+/* Em vez de Math.random puro (que pode repetir a mesma coisa várias vezes seguidas
+   ou demorar pra passar por tudo), cada "sacola" embaralha a lista inteira e vai
+   tirando uma por uma; só reembaralha quando esvazia — e evita repetir de novo
+   bem o último item tirado na emenda entre uma rodada e a próxima. Vale pra jogo,
+   personagem e local, como pedido. */
+
+function embaralhar(lista) {
+  const copia = lista.slice();
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
+
+function criarSacola(itens) {
+  let restantes = [];
+  let ultimoTirado;
+  return {
+    tirar() {
+      if (!itens.length) return undefined;
+      if (!restantes.length) {
+        restantes = embaralhar(itens);
+        if (restantes.length > 1 && restantes[restantes.length - 1] === ultimoTirado) {
+          [restantes[0], restantes[restantes.length - 1]] = [restantes[restantes.length - 1], restantes[0]];
+        }
+      }
+      ultimoTirado = restantes.pop();
+      return ultimoTirado;
+    },
+  };
+}
+
+// uma sacola de jogos por categoria/filtro (chave = nome da categoria ou "Todas as Categorias")
+const sacolasDeJogos = new Map();
+function tirarJogo(cat) {
+  const chave = cat || TODAS;
+  if (!sacolasDeJogos.has(chave)) sacolasDeJogos.set(chave, criarSacola(jogosDe(cat)));
+  return sacolasDeJogos.get(chave).tirar();
+}
+
+let sacolaPersonagens = null;
+let sacolaLocais = null;
+let sacolaFilmes = null;
+let sacolaAdjetivos = null;
+const tirarPersonagem = () => {
+  if (!sacolaPersonagens) sacolaPersonagens = criarSacola(state.personagens);
+  return sacolaPersonagens.tirar();
+};
+const tirarLocal = () => {
+  if (!sacolaLocais) sacolaLocais = criarSacola(state.locais);
+  return sacolaLocais.tirar();
+};
+const tirarFilme = () => {
+  if (!sacolaFilmes) sacolaFilmes = criarSacola(state.filmes);
+  return sacolaFilmes.tirar();
+};
+const tirarAdjetivo = () => {
+  if (!sacolaAdjetivos) sacolaAdjetivos = criarSacola(state.adjetivos);
+  return sacolaAdjetivos.tirar();
+};
 
 function replay(el, cls) {
   el.classList.remove(cls);
@@ -102,6 +166,7 @@ function stepCategoria(dir) {
 /* ---------- Tela 3 — carta do jogo ---------- */
 
 const gameBodyEl = document.getElementById('game-card-body');
+const gameIdEl = document.getElementById('game-id');
 const gameTitleEl = document.getElementById('game-title');
 const gameTagsEl = document.getElementById('game-tags');
 const gameDescEl = document.getElementById('game-description');
@@ -111,6 +176,7 @@ const expandirParticipantes = (v) => (v || '').replace(/^(\d+)\+$/, '$1 ou +');
 
 function renderJogo(jogo) {
   state.jogoAtual = jogo;
+  gameIdEl.textContent = jogo.id ? `#${jogo.id}` : '';
   gameTitleEl.textContent = jogo.jogo;
 
   const tags = [];
@@ -129,9 +195,9 @@ function renderJogo(jogo) {
 }
 
 function sortearJogo(cat) {
-  const lista = jogosDe(cat);
-  if (lista.length) renderJogo(pick(lista));
-  return lista.length > 0;
+  const jogo = tirarJogo(cat);
+  if (jogo) renderJogo(jogo);
+  return !!jogo;
 }
 
 /* ---------- Tela 4 — lista ---------- */
@@ -146,7 +212,7 @@ function linhaDeJogo(j) {
   if (j.mediador === 'sim') icons.push('<img src="assets/img/tag-mediador.svg" alt="Mediador">');
   if (j.musica === 'sim') icons.push('<img src="assets/img/tag-musica.svg" alt="Precisa de música">');
   if (j.participantes) icons.push(`${j.participantes}<img src="assets/img/tag-participantes.svg" alt="Participantes">`);
-  return `<li data-jogo="${j.jogo}"><span>${j.jogo}</span><span class="game-list__icons">${icons.join('')}</span></li>`;
+  return `<li data-id="${j.id}"><span>${j.jogo}</span><span class="game-list__icons">${icons.join('')}</span></li>`;
 }
 
 function renderLista() {
@@ -154,7 +220,7 @@ function renderLista() {
 }
 
 function abrirJogoDaLinha(li) {
-  const jogo = state.jogos.find((j) => j.jogo === li.dataset.jogo);
+  const jogo = state.jogos.find((j) => j.id === li.dataset.id);
   if (jogo) { renderJogo(jogo); goTo('screen-jogo'); }
 }
 
@@ -186,6 +252,7 @@ function renderBusca() {
   if (!termo) { searchResultsEl.innerHTML = ''; return; }
 
   const achados = state.jogos.filter((j) =>
+    j.id === termo.replace('#', '') ||
     normalizar(j.jogo).includes(termo) ||
     normalizar(j.categoria).includes(termo) ||
     normalizar(j.descricao).includes(termo));
@@ -212,7 +279,7 @@ searchBadgeEl.addEventListener('click', abrirBusca);
 document.getElementById('search-overlay-close').addEventListener('click', fecharBusca);
 searchInputEl.addEventListener('input', renderBusca);
 searchResultsEl.addEventListener('click', (e) => {
-  const li = e.target.closest('li[data-jogo]');
+  const li = e.target.closest('li[data-id]');
   if (!li) return;
   abrirJogoDaLinha(li);
   fecharBusca();
@@ -224,6 +291,8 @@ const badgeEl = document.getElementById('dice-badge');
 const overlayEl = document.getElementById('dice-overlay');
 const btnLocal = document.getElementById('btn-local');
 const btnPersonagem = document.getElementById('btn-personagem');
+const btnFilme = document.getElementById('btn-filme');
+const btnAdjetivo = document.getElementById('btn-adjetivo');
 
 function openOverlay() {
   fecharBusca(); // só um painel aberto por vez
@@ -242,14 +311,28 @@ badgeEl.addEventListener('click', openOverlay);
 document.getElementById('dice-overlay-close').addEventListener('click', closeOverlay);
 
 btnLocal.addEventListener('click', () => {
-  if (!state.locais.length) return;
-  btnLocal.textContent = pick(state.locais);
+  const local = tirarLocal();
+  if (!local) return;
+  btnLocal.textContent = local;
   replay(btnLocal, 'is-swapping');
 });
 btnPersonagem.addEventListener('click', () => {
-  if (!state.personagens.length) return;
-  btnPersonagem.textContent = pick(state.personagens);
+  const personagem = tirarPersonagem();
+  if (!personagem) return;
+  btnPersonagem.textContent = personagem;
   replay(btnPersonagem, 'is-swapping');
+});
+btnFilme.addEventListener('click', () => {
+  const filme = tirarFilme();
+  if (!filme) return;
+  btnFilme.textContent = filme;
+  replay(btnFilme, 'is-swapping');
+});
+btnAdjetivo.addEventListener('click', () => {
+  const adjetivo = tirarAdjetivo();
+  if (!adjetivo) return;
+  btnAdjetivo.textContent = adjetivo;
+  replay(btnAdjetivo, 'is-swapping');
 });
 
 /* ---------- Navegação ---------- */
@@ -386,6 +469,8 @@ async function boot() {
   state.categorias = [TODAS, ...new Set(jogos.map((j) => j.categoria).filter(Boolean))];
   state.personagens = aleatorio.map((r) => r.Personagem).filter(Boolean);
   state.locais = aleatorio.map((r) => r.Localizacao).filter(Boolean);
+  state.filmes = aleatorio.map((r) => r['Filme / Livro']).filter(Boolean);
+  state.adjetivos = aleatorio.map((r) => r['Adjetivo / Característica']).filter(Boolean);
 
   selectEl.innerHTML = state.categorias.map((c) => `<option value="${c}">${c}</option>`).join('');
   renderCategoria();

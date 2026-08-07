@@ -62,23 +62,34 @@ um), e opcionalmente sorteia um personagem e/ou uma localização pra dar tema �
 8. **Botão "+ OPÇÕES"** — confirmado pelo cliente: leva de volta pra lista de jogos (filtrada
    pela categoria do jogo atual).
 
+## Resolvido em 2026-08-07 (segunda leva)
+
+9. **Banco de jogos real** — 85 jogos cadastrados em `data/jogos.csv` (o cliente gerou um lote
+   maior com ajuda do Gemini e pediu remoção dos que repetiam premissa — ver `03-CHANGELOG.md`
+   v0.6.1). Não são mais placeholders/exemplo.
+10. **Sorteio de jogo** — não repete mais. Jogo, personagem, local, filme/livro e adjetivo usam
+    sorteio tipo "sacola" (embaralha tudo, tira um por um, só reembaralha quando esgota) — vale
+    pra tudo no app, como pedido. Ver `01-ARQUITETURA-GERAL.md`.
+11. **ID por jogo** — cada jogo tem um `id` único no CSV, exibido no canto superior esquerdo da
+    carta sorteada. Facilita achar/editar uma linha específica no arquivo.
+12. **Busca ganhou mais um critério**: também acha jogo pelo número do id, além de nome/
+    categoria/regra.
+13. **Aleatoriedades expandidas**: `data/aleatoriedades.csv` cresceu pra 500 linhas e ganhou
+    duas colunas novas — `Filme / Livro` e `Adjetivo / Característica` — cada uma com seu
+    próprio botão no overlay do dado (2x2 agora, era 1x2).
+
 ## Decisões pendentes (aguardando resposta do cliente)
 
 1. **Colunas mediador/aquecimento/música** — implementadas como selos informativos (cartão do
    jogo + legenda da lista), sem filtro ativo. Confirma que é só informativo por enquanto, ou
    quer filtro ativo também?
-2. **Sorteio de jogo** — implementado permitindo repetir o mesmo jogo duas vezes seguidas
-   (mais simples). Muda pra "não repete até esgotar a lista da categoria" se preferir.
-3. **PWA / instalável** — ainda não implementado. Vale adicionar manifest + funcionamento
+2. **PWA / instalável** — ainda não implementado. Vale adicionar manifest + funcionamento
    offline (ícone na tela inicial do celular, funciona sem internet numa festa com wifi ruim)?
-4. **Quem edita os CSVs depois de prontos** — só o Kewin (via git/planilha) ou alguém sem
-   perfil técnico vai mexer? Se for o segundo caso, talvez valha uma telinha admin simples em
-   vez de editar CSV cru. Enquanto isso, passo a passo pra edição manual está no `README.md`.
-5. **Categoria e descrição dos 4 jogos de exemplo sem confirmação** (Musical, Congela, Medusa,
-   Círculo da Conexão) — só "Jogo do Troca" teve categoria e descrição confirmadas pelo design.
-   Os outros usam "Trios" como placeholder estrutural e descrição em aberto — ver nota em
-   `01-ARQUITETURA-GERAL.md`. Isso é só para os 5 jogos de exemplo; a planilha real do cliente
-   vai substituir tudo.
+3. **Formulário n8n pra cadastrar jogos direto no GitHub** — pedido pelo cliente, **bloqueado**:
+   o conector n8n MCP desta sessão está ligado na VPS da ADN Construtora, não na `vps-lava`
+   (onde vive o workflow "[KEWIN] Quinta Livre" que serviria de referência). Falta o cliente
+   autorizar/conectar o n8n certo pra essa tarefa avançar. Ver `04-REGISTRO-BUGS.md`.
+4. **Botão "+" no canto superior esquerdo** pra abrir esse formulário — depende do item 3.
 
 ## Fora do escopo original, mas pedido e implementado
 

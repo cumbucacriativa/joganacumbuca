@@ -44,6 +44,7 @@ Conforme o app crescer, `index.html` provavelmente vai ganhar irmãos `style.css
 
 | Coluna | Tipo | Descrição |
 |---|---|---|
+| `id` | número, único | Identificador do jogo. Aparece no canto superior esquerdo da carta (`#42`). Ao adicionar um jogo novo, usar o próximo número disponível (maior `id` do arquivo + 1) — não reaproveitar id de jogo removido. |
 | `jogo` | texto | Nome do jogo de improviso |
 | `categoria` | texto | Categoria do jogo. **Não existe lista fixa de categorias** — o app lê os valores únicos dessa coluna e monta a lista de categorias dinamicamente. Categoria nova na planilha = categoria nova no app, sem precisar mexer em código. |
 | `participantes` | texto | Ex: `2+` — exibido como está na lista, e expandido para "2 ou +" no cartão do jogo sorteado |
@@ -52,12 +53,8 @@ Conforme o app crescer, `index.html` provavelmente vai ganhar irmãos `style.css
 | `musica` | `sim`/`não` | Se o jogo usa/precisa de música |
 | `descricao` | texto (entre aspas se tiver vírgula) | Regras do jogo, mostradas no cartão sorteado |
 
-Os 5 jogos de exemplo (Jogo do Troca, Musical, Congela, Medusa, Círculo da Conexão) são os
-mesmos nomes/tags/descrição que aparecem nos prints do XD — não foram inventados. A categoria
-`Trios` em todos eles é um **placeholder estrutural**: só "Jogo do Troca" teve a categoria
-confirmada pela interação do protótipo (SORTEAR em "Trios" leva a ele); os outros 4 não têm
-categoria confirmada pelo design, e a descrição deles também não foi fornecida — ficou como
-aviso ("Descrição desse jogo ainda não cadastrada.") até o cliente completar a planilha real.
+Banco atual: 85 jogos reais (o cliente gerou um lote maior com ajuda do Gemini e depois pediu
+pra remover os que repetiam a mesma premissa — ver `03-CHANGELOG.md` v0.6.1).
 
 ### `data/aleatoriedades.csv`
 
@@ -65,10 +62,22 @@ aviso ("Descrição desse jogo ainda não cadastrada.") até o cliente completar
 |---|---|---|
 | `Personagem` | texto | Lista de personagens pro sorteio aleatório |
 | `Localizacao` | texto | Lista de localizações pro sorteio aleatório |
+| `Filme / Livro` | texto | Lista de filmes/livros pro sorteio aleatório |
+| `Adjetivo / Característica` | texto | Lista de adjetivos/características pro sorteio aleatório |
 
-Duas colunas independentes — não são pares linha-a-linha, cada uma é sorteada separadamente
-dentro da própria lista. (Ver pergunta em aberto sobre o mecanismo do "dado" em
-`02-ESCOPO.md`.)
+Quatro colunas independentes — não são pares linha-a-linha, cada uma é sorteada separadamente
+dentro da própria lista (não precisam nem ter a mesma quantidade de linhas preenchidas). O
+overlay do dado (acionado a qualquer momento, em qualquer tela) tem um botão pra cada uma das
+quatro.
+
+### Sorteio sem repetição ("sacola")
+
+Jogo (por categoria/filtro), personagem, local, filme/livro e adjetivo usam o mesmo mecanismo
+em `assets/js/app.js` (`criarSacola`): embaralha a lista inteira e vai tirando um item por vez;
+só reembaralha quando esgota todas as opções, e evita repetir de novo o último item tirado bem
+na emenda entre uma rodada e a próxima. Existe uma sacola por categoria de jogo (chave = nome
+da categoria ou "Todas as Categorias") e uma sacola só pra cada uma das quatro colunas de
+`aleatoriedades.csv`.
 
 ## Decisões técnicas em aberto
 

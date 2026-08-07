@@ -2,6 +2,29 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
+## [0.7.0] — 2026-08-07
+
+### Adicionado
+- **`id` por jogo** em `data/jogos.csv` (1 a 85, sequencial). Aparece no canto superior
+  esquerdo da carta do jogo sorteado (`#42`). Busca agora também acha jogo pelo número do id.
+- **Sorteio sem repetição ("sacola")**: jogo (por categoria), personagem, local, filme/livro e
+  adjetivo não repetem mais a mesma opção antes de passar por todas as outras — pedido do
+  cliente porque o `Math.random()` puro às vezes caía no mesmo jogo/personagem várias vezes
+  seguidas. Detalhe do mecanismo em `01-ARQUITETURA-GERAL.md`.
+- **`Filme / Livro` e `Adjetivo / Característica`**: duas colunas novas em
+  `data/aleatoriedades.csv` (que também cresceu pra 500 linhas), cada uma com seu próprio
+  botão no overlay do dado — virou uma grade 2x2 (era 1x2).
+
+### Documentado
+- Regra nova no `CLAUDE.md`: sempre `git fetch` e comparar local com `origin/main` antes de
+  editar `jogos.csv`/`aleatoriedades.csv`, já que o cliente edita esses arquivos direto (às
+  vezes por fora desta sessão).
+
+### Bloqueado
+- Formulário n8n pra cadastrar jogo direto no GitHub (pedido do cliente) e o botão "+" no app
+  que abriria esse formulário — o conector n8n MCP desta sessão está ligado na VPS errada
+  (ADN Construtora, não a `vps-lava` da própria Lava). Ver `04-REGISTRO-BUGS.md`.
+
 ## [0.6.1] — 2026-08-07
 
 ### Removido

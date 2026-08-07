@@ -15,6 +15,7 @@ Google Sheets, ou num editor de texto qualquer. Cada linha é um jogo, com estas
 
 | Coluna | O que é | Exemplos |
 |---|---|---|
+| `id` | Número único do jogo. Aparece no canto superior esquerdo da carta. **Use o próximo número livre** (maior `id` do arquivo + 1) — nunca reaproveite o id de um jogo removido. | `86` |
 | `jogo` | Nome do jogo | `Jogo do Troca` |
 | `categoria` | Categoria — **não precisa cadastrar em lugar nenhum**, o app lê os valores dessa coluna e monta a lista de categorias sozinho. Categoria nova aqui = categoria nova no app. | `Trios` |
 | `participantes` | Quantidade mínima | `2+` |
@@ -23,16 +24,21 @@ Google Sheets, ou num editor de texto qualquer. Cada linha é um jogo, com estas
 | `musica` | Se usa/precisa de música | `sim` ou `não` |
 | `descricao` | As regras do jogo, em texto corrido. Se tiver vírgula dentro do texto, **coloque a descrição toda entre aspas** (veja a linha do "Jogo do Troca" no arquivo como exemplo) | `"Um participante atua como..."` |
 
-Pra **adicionar um jogo novo**: adiciona uma linha no final do CSV com essas 7 colunas
+Pra **adicionar um jogo novo**: adiciona uma linha no final do CSV com essas 8 colunas
 preenchidas (`sim`/`não` sempre em minúsculo, sem acento).
 
 **Tom da descrição:** objetivo e informal, do jeito que se fala no dia a dia. Pode caçoar um
 pouco pra deixar leve. Sem travessão, sem emoji, sem palavra difícil — é pra ler rápido numa
 festa, não pra impressionar ninguém.
 
-Os personagens e localizações do "dado" (ícone do topo) ficam em
-[`data/aleatoriedades.csv`](data/aleatoriedades.csv) — duas colunas, `Personagem` e
-`Localizacao`, independentes uma da outra (não precisam ter a mesma quantidade de linhas).
+Os personagens, localizações, filmes/livros e adjetivos do "dado" (ícone do topo) ficam em
+[`data/aleatoriedades.csv`](data/aleatoriedades.csv) — quatro colunas (`Personagem`,
+`Localizacao`, `Filme / Livro`, `Adjetivo / Característica`), independentes entre si (não
+precisam ter a mesma quantidade de linhas preenchidas).
+
+**Sorteio sem repetição:** jogo, personagem, local, filme/livro e adjetivo nunca repetem a
+mesma opção duas vezes seguidas — o app sorteia toda a lista embaralhada antes de começar a
+repetir, tipo um baralho.
 
 ## Como testar antes de publicar
 

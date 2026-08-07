@@ -51,7 +51,26 @@ projeto vive dentro do Google Drive, que às vezes trava builds locais por sincr
 contínua. Como este projeto não tem build step, o risco é baixo — só relevante se algum dia
 entrar um bundler/npm aqui.)*
 
+### Conector n8n MCP desta sessão aponta pra VPS errada
+
+**Sintoma:** cliente pediu um workflow novo em `vps-lava` (n8n da própria agência Lava, onde
+vive o `[KEWIN] Quinta Livre`, ID `sl61e9Qfcq6XdB99` — ver `n8n/vps-lava/clientes/lava-agencia/
+README.md`), pra rodar em paralelo com ele. O conector n8n MCP disponível nesta sessão
+(`search_workflows` sem filtro) retornou workflows da **ADN Construtora**
+(`[ADN] Transferência e Backup de Leads`, `Normalizador de Dados`, etc.) — ou seja, está
+plugado na `vps-adn`, não na `vps-lava`.
+
+**Bloqueia:** criar o workflow de formulário pra cadastro de jogos (ver `02-ESCOPO.md`,
+pendência 3) e o botão "+" no app que linkaria pra ele (pendência 4).
+
+**Como resolver:** o cliente precisa autorizar/conectar o MCP do n8n certo
+(`vps-lava` — endpoint e token em `n8n/vps-lava/mcp-config.md`) numa sessão que tenha acesso a
+configurar conectores MCP. Depois disso, seguir as regras de `n8n/CLAUDE.md` (exportar backup
+antes de mudança relevante, registrar em `n8n/vps-lava/clientes/lava-agencia/changelog.md`).
+
 ## Pendências (roadmap curto)
 
-- Publicar repositório + GitHub Pages (ver opções acima).
-- Implementar UI real — aguardando respostas em `02-ESCOPO.md`.
+- Workflow n8n de cadastro de jogos + botão "+" no app — bloqueado, ver acima.
+- Colunas mediador/aquecimento/música como filtro ativo (hoje só informativo) — aguardando
+  confirmação em `02-ESCOPO.md`.
+- PWA/instalável — aguardando confirmação em `02-ESCOPO.md`.
