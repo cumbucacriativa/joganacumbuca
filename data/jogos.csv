@@ -1,11 +1,6 @@
-jogo,categoria,mediador,aquecimento,musica
-Sim E,Cena,não,não,não
-Machine de Emoções,Aquecimento,sim,sim,não
-Entrevista de Emprego,Cena,sim,não,não
-Freeze,Cena,sim,não,não
-Genealogia,Palavra,sim,não,não
-Orquestra Maluca,Aquecimento,sim,sim,sim
-Zip Zap Boing,Aquecimento,sim,sim,não
-Balada Instantânea,Musical,sim,não,sim
-Contador de Histórias,Palavra,não,não,não
-Espelho,Aquecimento,não,sim,não
+jogo,categoria,participantes,mediador,aquecimento,musica,descricao
+Jogo do Troca,Trios,2+,sim,não,não,"Um participante atua como mediador e os outros iniciam uma cena improvisada a partir de um tema pré-definido. Sempre que o mediador gritar 'Troca!', o ator que acabou de falar deve substituir imediatamente sua última palavra ou frase por uma nova ideia, repetindo o processo se o comando for dito novamente, até que a cena seja liberada para continuar."
+Musical,Trios,2+,sim,não,sim,
+Congela,Trios,2+,sim,não,não,
+Medusa,Trios,2+,sim,sim,não,
+Círculo da Conexão,Trios,2+,sim,sim,não,

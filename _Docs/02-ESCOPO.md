@@ -43,33 +43,36 @@ um), e opcionalmente sorteia um personagem e/ou uma localização pra dar tema �
    "Sortear de novo"): são **dois sorteios independentes**, "Local aleatório" e "Personagem
    Aleatório", cada um acionável separadamente.
 
+## Resolvido em 2026-08-07
+
+3. **SVGs e specs exatos** — cliente exportou os SVGs reais de cada tela (`_Docs/SVGs/`) e
+   mandou prints do "Modo de especificações" do XD com hex e fonte exatos. Ver
+   `05-DESIGN-VISUAL.md` (seção "Confirmado").
+4. **Versão navegável construída** — as 4 telas principais (início, categoria, jogo sorteado,
+   lista de jogos) e o overlay de sorteio de personagem/local estão implementados e testados
+   localmente, batendo visualmente com os prints do XD. Ver `03-CHANGELOG.md` v0.2.0.
+
 ## Decisões pendentes (aguardando resposta do cliente)
 
-1. **SVGs dos ícones** — não são extraíveis de PNG. Pedir pro cliente exportar do XD (clique
-   direito no elemento > "Copiar como SVG"/"Exportar"): ícone de máscaras+shuffle (marca),
-   ícone de dado, ícones da legenda da lista (aquecimento, mediador, participantes, música).
-   Sem isso, recrio como SVG novo, próximo visualmente.
-2. **Hex/fonte exatos** — sem acesso ao "Modo de especificações" do XD nesta sessão (mesma
-   limitação de screenshot). Cliente pode tentar abrir esse modo no link e mandar print, ou
-   confirmar se as aproximações em `05-DESIGN-VISUAL.md` servem.
-3. **Botão "+ OPÇÕES"** (tela 3, cartão do jogo sorteado) — o que ele faz? Mais tags/detalhes
-   do jogo, filtros, ou outra coisa?
-4. **Colunas mediador/aquecimento/música** — pelos prints, aparecem como selos informativos
-   (legenda + ícones na lista), sem controle de filtro visível. Confirma que é só informativo
-   por enquanto, ou quer filtro ativo também?
-5. **Carrossel de cartas no rodapé** — no protótipo é decorativo (ícone genérico de máscaras
-   repetido). Mantém decorativo na implementação (mais simples, e é o que o design mostra), ou
-   deve mostrar jogos reais e ser clicável?
-6. **Sorteio de jogo** — pode repetir o mesmo jogo duas vezes seguidas, ou não repete até
-   passar por toda a lista da categoria?
-7. **PWA / instalável** — vale adicionar manifest + funcionamento offline (ícone na tela
-   inicial do celular, funciona sem internet numa festa com wifi ruim)?
-8. **Quem edita os CSVs depois de prontos** — só o Kewin (via git/planilha) ou alguém sem
+1. **Botão "+ OPÇÕES"** (tela 3, cartão do jogo sorteado) — implementado como placeholder sem
+   função ainda (visível, mas não faz nada ao clicar) até saber o que ele deve abrir.
+2. **Colunas mediador/aquecimento/música** — implementadas como selos informativos (cartão do
+   jogo + legenda da lista), sem filtro ativo. Confirma que é só informativo por enquanto, ou
+   quer filtro ativo também?
+3. **Sorteio de jogo** — implementado permitindo repetir o mesmo jogo duas vezes seguidas
+   (mais simples). Muda pra "não repete até esgotar a lista da categoria" se preferir.
+4. **PWA / instalável** — ainda não implementado. Vale adicionar manifest + funcionamento
+   offline (ícone na tela inicial do celular, funciona sem internet numa festa com wifi ruim)?
+5. **Quem edita os CSVs depois de prontos** — só o Kewin (via git/planilha) ou alguém sem
    perfil técnico vai mexer? Se for o segundo caso, talvez valha uma telinha admin simples em
    vez de editar CSV cru.
-9. **Publicação no GitHub** — sessão atual não tem GitHub CLI (`gh`) nem conector GitHub
-   autenticado disponível, então não consegui criar o repositório sozinho. Ver
-   `04-REGISTRO-BUGS.md` para as opções propostas.
+6. **Publicação no GitHub** — sessão atual não tem GitHub CLI (`gh`) nem conector GitHub
+   autenticado disponível, então não consegui criar o repositório sozinho nem colocar no ar.
+   Ver `04-REGISTRO-BUGS.md` para as opções propostas.
+7. **Categoria e descrição dos 4 jogos de exemplo sem confirmação** (Musical, Congela, Medusa,
+   Círculo da Conexão) — só "Jogo do Troca" teve categoria e descrição confirmadas pelo design.
+   Os outros usam "Trios" como placeholder estrutural e descrição em aberto — ver nota em
+   `01-ARQUITETURA-GERAL.md`. Isso é só para os 5 jogos de exemplo; a planilha real do cliente
+   vai substituir tudo.
 
-Assim que essas respostas chegarem, este documento e `01-ARQUITETURA-GERAL.md` devem ser
-atualizados antes de começar a implementação da versão navegável.
+Assim que essas respostas chegarem, este documento deve ser atualizado.

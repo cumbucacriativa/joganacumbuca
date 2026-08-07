@@ -46,9 +46,18 @@ Conforme o app crescer, `index.html` provavelmente vai ganhar irmãos `style.css
 |---|---|---|
 | `jogo` | texto | Nome do jogo de improviso |
 | `categoria` | texto | Categoria do jogo. **Não existe lista fixa de categorias** — o app lê os valores únicos dessa coluna e monta a lista de categorias dinamicamente. Categoria nova na planilha = categoria nova no app, sem precisar mexer em código. |
+| `participantes` | texto | Ex: `2+` — exibido como está na lista, e expandido para "2 ou +" no cartão do jogo sorteado |
 | `mediador` | `sim`/`não` | Se o jogo precisa de alguém mediando/narrando |
 | `aquecimento` | `sim`/`não` | Se é um jogo de aquecimento |
 | `musica` | `sim`/`não` | Se o jogo usa/precisa de música |
+| `descricao` | texto (entre aspas se tiver vírgula) | Regras do jogo, mostradas no cartão sorteado |
+
+Os 5 jogos de exemplo (Jogo do Troca, Musical, Congela, Medusa, Círculo da Conexão) são os
+mesmos nomes/tags/descrição que aparecem nos prints do XD — não foram inventados. A categoria
+`Trios` em todos eles é um **placeholder estrutural**: só "Jogo do Troca" teve a categoria
+confirmada pela interação do protótipo (SORTEAR em "Trios" leva a ele); os outros 4 não têm
+categoria confirmada pelo design, e a descrição deles também não foi fornecida — ficou como
+aviso ("Descrição desse jogo ainda não cadastrada.") até o cliente completar a planilha real.
 
 ### `data/aleatoriedades.csv`
 

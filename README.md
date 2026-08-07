@@ -9,12 +9,12 @@ HTML/CSS/JS puro, sem framework e sem build — publicado direto no GitHub Pages
 ## Rodar localmente
 
 Qualquer servidor estático serve (o `fetch()` dos CSVs não funciona abrindo o `index.html`
-direto do disco, `file://`):
+direto do disco, `file://`). Tem um servidor mínimo pronto em `scratch/dev-server.js`
+(sem dependências — evita bugs de `npx` com espaço no caminho da pasta no Windows):
 
 ```bash
-npx serve .
-# ou
-python -m http.server 8000
+node scratch/dev-server.js
+# depois abra http://localhost:5173
 ```
 
 ## Estrutura

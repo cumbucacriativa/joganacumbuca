@@ -1,5 +1,44 @@
 # Design Visual
 
+## Confirmado (2026-08-07)
+
+Cliente mandou prints do "Modo de especificações" do XD (cores/fontes exatas) e exportou os
+SVGs reais de cada tela. Os valores abaixo são **oficiais**, não aproximação — substituem a
+seção antiga logo abaixo, mantida só como histórico do processo.
+
+**Paleta:**
+
+| Uso | Hex |
+|---|---|
+| Fundo de página | `#FFF7E1` |
+| Verde escuro (cartões, texto sobre fundo claro, botões escuros) | `#23302D` |
+| Accent — verde neon (bordas, títulos de categoria, botões primários) | `#00FFAA` |
+| Branco puro | `#FFFFFF` |
+| Quase-branco (texto sobre botão/cartão escuro) | `#F9FFFC` |
+| Divisor sobre cartão escuro | `#FFF7E1` |
+| Divisor sobre cartão accent | `#707070` |
+
+**Tipografia:** **Libre Franklin Bold** (títulos, nomes de categoria, texto de botão —
+`letter-spacing: 0.06em`) + **Roboto** (descrição de jogo, legendas, nomes de jogo na lista).
+Ambas gratuitas no Google Fonts, carregadas em `assets/css/style.css`.
+
+**Assets:** os SVGs exportados pelo cliente ficam em `_Docs/SVGs/` (fonte de referência, um
+por tela). Os ícones usados de fato no app estão em `assets/icons/` — a maioria é cópia direta
+dos arquivos exportados (cores exatas); o ícone de marca (máscaras+shuffle) e o ícone de
+música foram recriados à mão no mesmo estilo, porque os arquivos exportados combinavam esse
+ícone com outros elementos (badge/cartão inteiro) ou, no caso da música, não foram exportados
+— ver nota em `assets/icons/` e no changelog.
+
+**Cartão "ticket"**, confirmado pelos SVGs: `border-radius: 27px`, borda dupla (externa 1px +
+interna inset ~24px, `border-radius: 20px`) e dois pontos decorativos de 10px (canto
+superior-direito e inferior-esquerdo). A variante da tela de lista (`Carta Verde sem
+ornamentos.svg`) não tem borda dupla, pontos nem ícone de marca — variante "plain" implementada
+em CSS (`.ticket-card--plain`).
+
+---
+
+## Leitura visual original (histórico, pré-confirmação)
+
 Extraído por leitura visual dos 5 prints do protótipo Adobe XD enviados pelo cliente em
 2026-08-06 (`xd.adobe.com/view/4478a107-78cd-4bbb-b235-7b34649b947d-112b`). **Não** veio do
 "Modo de especificações" do XD — essa tela também é canvas/WebGL e a ferramenta de screenshot
