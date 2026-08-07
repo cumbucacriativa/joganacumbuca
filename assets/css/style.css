@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@600;700;800&family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700;800&family=Roboto:wght@400;700&display=swap');
 
 :root {
   --bg: #FFF7E1;
@@ -6,10 +6,8 @@
   --accent: #00FFAA;
   --white: #FFFFFF;
   --near-white: #F9FFFC;
-  --divider-on-dark: #FFF7E1;
-  --divider-on-accent: #707070;
-  --card-w: 362.5;
-  --card-h: 507.9;
+  --rule-dark-card: #FFF7E1;
+  --rule-accent-card: #707070;
 }
 
 * { box-sizing: border-box; }
@@ -21,6 +19,7 @@ body {
   font-family: 'Roboto', -apple-system, sans-serif;
   overflow: hidden;
   overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .app {
@@ -30,420 +29,448 @@ body {
   height: 100dvh;
   margin: 0 auto;
   overflow: hidden;
-  perspective: 1400px;
-  isolation: isolate;
+  background: var(--bg);
+  container-type: inline-size;
+  container-name: app;
 }
 
-/* ---------- Dice badge (persistent, all screens) ---------- */
+/* ============ Badge do dado (fixo no topo, todas as telas) ============ */
 
 .dice-badge {
   position: absolute;
   top: 0;
   left: 50%;
+  width: 17.44cqw;
+  aspect-ratio: 75 / 76;
   transform: translateX(-50%);
-  width: 75px;
-  height: 76px;
-  background: var(--dark);
-  border-radius: 0 0 28px 28px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 14px;
-  z-index: 40;
+  background: none;
   border: none;
+  padding: 0;
   cursor: pointer;
-  transition: transform .2s ease;
+  z-index: 40;
+  transition: opacity .2s ease;
 }
-.dice-badge:active { transform: translateX(-50%) scale(0.94); }
-.dice-badge img { width: 27px; height: 31px; display: block; }
-.dice-badge.is-rolling img { animation: dice-spin .5s ease; }
-@keyframes dice-spin {
-  0% { transform: rotate(0); }
-  60% { transform: rotate(230deg); }
-  100% { transform: rotate(360deg); }
+.dice-badge__shape {
+  position: absolute;
+  inset: 0;
+  background: var(--dark);
+  border-radius: 0 0 6.5cqw 6.5cqw;
+  transition: filter .12s ease;
+}
+.dice-badge__dice {
+  position: absolute;
+  top: 17%;
+  left: 50%;
+  width: 41%;
+  transform: translateX(-50%);
+  animation: dice-idle 5s ease-in-out infinite;
+}
+.dice-badge:active .dice-badge__shape { filter: brightness(1.4); }
+.dice-badge.is-rolling .dice-badge__dice { animation: dice-roll .62s cubic-bezier(.3,.9,.3,1); }
+.dice-badge.is-open { opacity: 0; pointer-events: none; }
+
+@keyframes dice-idle {
+  0%, 88%, 100% { transform: translateX(-50%) rotate(0deg); }
+  93% { transform: translateX(-50%) rotate(-9deg); }
+  96% { transform: translateX(-50%) rotate(7deg); }
+}
+@keyframes dice-roll {
+  0%   { transform: translateX(-50%) rotate(0deg)   scale(1); }
+  55%  { transform: translateX(-50%) rotate(340deg) scale(1.25); }
+  100% { transform: translateX(-50%) rotate(720deg) scale(1); }
 }
 
-/* ---------- Footer card carousel (decorative) ---------- */
+/* ============ Carrossel de cartas do rodapé ============ */
 
 .footer-carousel {
   position: absolute;
-  left: 0; right: 0; bottom: -18px;
-  height: 132px;
+  left: 0; right: 0; bottom: 0;
+  height: 26cqw;
   overflow: hidden;
   z-index: 5;
   pointer-events: none;
 }
 .footer-carousel__track {
   display: flex;
-  align-items: flex-end;
-  gap: -18px;
+  align-items: flex-start;
   width: max-content;
-  animation: carousel-scroll 34s linear infinite;
+  animation: carousel-scroll 42s linear infinite;
 }
-.footer-card {
-  width: 92px;
-  height: 128px;
+.footer-carousel__track img {
+  width: 29.8cqw;
   flex: none;
-  margin-right: -20px;
-  background: var(--dark);
-  border: 1px solid var(--accent);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: rotate(-4deg);
+  margin-right: -11.6cqw;
+  display: block;
 }
-.footer-card:nth-child(even) { transform: rotate(3deg); }
-.footer-card img { width: 34px; height: 18px; display: block; }
 @keyframes carousel-scroll {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to   { transform: translateX(-50%); }
 }
 
-/* ---------- Screens & card-flip transition ---------- */
+/* ============ Telas + transição de carta girando ============ */
 
-.screens {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+.screens { position: relative; width: 100%; height: 100%; }
+
 .screen {
   position: absolute;
   inset: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
-  padding: 92px 24px 0;
-  opacity: 0;
-  pointer-events: none;
-  transform: rotateY(0deg);
-  transform-style: preserve-3d;
-  transition: opacity .38s ease, transform .5s cubic-bezier(.4,.1,.2,1);
-}
-.screen.is-active {
-  opacity: 1;
-  pointer-events: auto;
+  padding: 19.5cqw 3.5cqw 23cqw;
+  perspective: 1400px;
   z-index: 10;
 }
-.screen.is-leaving {
-  transform: rotateY(-90deg) scale(.92);
-  opacity: 0;
-}
-.screen.is-entering {
-  transform: rotateY(90deg) scale(.92);
-}
-.screen.is-entering.is-active {
-  transform: rotateY(0) scale(1);
-}
+.screen.is-active { display: flex; }
 
-/* ---------- Ticket card ---------- */
+@keyframes card-flip-out {
+  from { transform: rotateY(0deg)   scale(1);   opacity: 1; }
+  to   { transform: rotateY(-88deg) scale(.86); opacity: .3; }
+}
+@keyframes card-flip-in {
+  from { transform: rotateY(88deg)  scale(.86); opacity: .3; }
+  to   { transform: rotateY(0deg)   scale(1);   opacity: 1; }
+}
+.screen.is-flip-out .ticket-card { animation: card-flip-out .26s cubic-bezier(.55,0,.85,.4) forwards; }
+.screen.is-flip-in  .ticket-card { animation: card-flip-in  .34s cubic-bezier(.15,.7,.4,1) both; }
 
+/* ============ Carta — SVG exportado do XD como fundo ============ */
+
+/* .ticket-card é o container de consulta e NÃO tem padding, para que 1cqw
+   seja sempre 1% da largura total da carta (as medidas do XD são nessa escala). */
 .ticket-card {
   position: relative;
   width: 100%;
-  max-width: 362px;
-  aspect-ratio: var(--card-w) / var(--card-h);
-  border-radius: 27px;
-  border: 1px solid var(--accent);
+  max-width: 362.5px;
+  aspect-ratio: 362.5 / 507.9;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  container-type: inline-size;
+  container-name: card;
+  transform-style: preserve-3d;
+}
+.card-inner {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 34px 26px 28px;
   text-align: center;
+  /* topo livre: o ícone de máscaras já vem desenhado no SVG da carta */
+  padding: 25cqw 13cqw 8cqw;
 }
-.ticket-card::before {
-  content: '';
-  position: absolute;
-  inset: 24px;
-  border: 1px solid var(--accent);
-  border-radius: 20px;
-  pointer-events: none;
-}
-.ticket-card::after,
-.ticket-card .dot {
-  content: '';
-  position: absolute;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-.ticket-card::after { top: 25px; right: 25px; }
-.ticket-card .dot { bottom: 25px; left: 25px; }
+.card-inner--centro { justify-content: center; gap: 7cqw; padding-top: 12cqw; }
+.card-inner--plana  { padding: 7cqw 7cqw 6cqw; }
 
-.ticket-card--dark { background: var(--dark); color: var(--white); }
-.ticket-card--dark .ticket-card__title { color: var(--accent); }
+.card--escura      { background-image: url('../img/carta-escura.svg');      color: var(--white); }
+.card--branca      { background-image: url('../img/carta-branca.svg');      color: var(--dark);  }
+.card--verde       { background-image: url('../img/carta-verde.svg');       color: var(--dark);  }
+.card--verde-plana { background-image: url('../img/carta-verde-plana.svg'); color: var(--dark);  }
 
-.ticket-card--white {
-  background: var(--near-white);
-  border-color: var(--dark);
-  color: var(--dark);
-}
-.ticket-card--white::before { border-color: var(--dark); }
-.ticket-card--white::after, .ticket-card--white .dot { background: var(--dark); }
-
-.ticket-card--accent {
-  background: var(--accent);
-  border-color: var(--dark);
-  color: var(--dark);
-}
-.ticket-card--accent::before { border-color: var(--dark); }
-.ticket-card--accent::after, .ticket-card--accent .dot { background: var(--dark); }
-
-.ticket-card--plain { padding-top: 26px; }
-.ticket-card--plain::before,
-.ticket-card--plain::after,
-.ticket-card--plain .dot { display: none; }
-
-.ticket-card__brand {
-  width: 58px;
-  height: 30px;
-  margin-bottom: 18px;
-  flex: none;
-}
-.ticket-card__brand img { width: 100%; height: 100%; display: block; }
-
-.ticket-card__title {
-  font-family: 'Libre Franklin', sans-serif;
-  font-weight: 800;
-  font-size: 30px;
-  text-transform: uppercase;
-  letter-spacing: .01em;
-  margin: 0 0 10px;
-}
-
-/* ---------- Buttons ---------- */
+/* ============ Botões — medidas exatas dos SVGs (base 362.5px) ============ */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 18px;
-  border-radius: 13px;
+  height: 8.83cqw;
+  padding: 0 4cqw;
   border: none;
+  border-radius: 3.59cqw;
   font-family: 'Libre Franklin', sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 4.41cqw;
   letter-spacing: .06em;
+  line-height: 1;
   cursor: pointer;
   white-space: nowrap;
-  -webkit-tap-highlight-color: transparent;
+  transition: transform .12s ease, filter .12s ease;
 }
+.btn:active { transform: scale(.94); filter: brightness(1.08); }
 .btn--accent { background: var(--accent); color: var(--dark); }
-.btn--dark { background: var(--dark); color: var(--near-white); }
-.btn--dark.btn--wide { width: 100%; }
-.btn--icon { width: 32px; height: 32px; padding: 0; border-radius: 50%; }
-.btn--icon img { width: 16px; height: 16px; }
-.btn--pill-icon { width: 56px; }
-.btn--pill-icon img { width: 26px; height: 17px; }
-.btn-row { display: flex; gap: 12px; margin-top: auto; }
+.btn--dark   { background: var(--dark);   color: var(--near-white); }
+.btn--w106    { width: 29.24cqw; padding: 0; }
+.btn--w183    { width: 50.48cqw; padding: 0; }
+.btn--w252    { width: 69.52cqw; padding: 0; }
+.btn--shuffle { width: 15.45cqw; padding: 0; }
+.btn--shuffle img { width: 8.8cqw; display: block; }
+.btn--x       { width: 9.38cqw;  padding: 0; border-radius: 50%; }
 
-/* ---------- Home (tela 1) ---------- */
+.btn-row {
+  display: flex;
+  gap: 3.5cqw;
+  margin-top: auto;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
 
-#screen-inicio .ticket-card { justify-content: center; }
-.wordmark { width: 100%; max-width: 240px; margin: 0 0 24px; }
-.wordmark img { width: 100%; display: block; }
+/* ============ Tela 1 — inicial ============ */
 
-/* ---------- Categoria (tela 2) ---------- */
+.wordmark { width: 100%; max-width: 62cqw; display: block; }
+
+/* ============ Tela 2 — categorias ============ */
 
 .category-nav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  margin: 10px 0;
+  gap: 2.5cqw;
+  margin: auto 0;
+  width: 100%;
 }
 .category-nav button {
-  background: none; border: none; padding: 6px; cursor: pointer;
+  background: none;
+  border: none;
+  padding: 1.5cqw;
+  cursor: pointer;
+  transition: transform .12s ease;
 }
-.category-nav button img { width: 24px; height: 21px; display: block; }
+.category-nav button:active { transform: scale(.8); }
+.category-nav button img { width: 9.4cqw; display: block; }
+
 .category-name {
-  min-height: 66px;
-  display: flex;
-  align-items: center;
-  color: var(--accent);
-  font-size: 40px;
-}
-
-/* ---------- Jogo sorteado (tela 3) ---------- */
-
-.tag-row {
-  display: flex;
-  gap: 18px;
-  justify-content: center;
-  margin: 6px 0 14px;
-  flex-wrap: wrap;
-}
-.tag {
-  display: flex;
-  align-items: center;
-  gap: 6px;
   font-family: 'Libre Franklin', sans-serif;
   font-weight: 700;
-  font-size: 15px;
-}
-.tag img { width: 16px; height: 16px; }
-.divider {
+  font-size: 15.17cqw;      /* 55px na escala do XD */
+  line-height: 1.05;
+  color: var(--accent);
+  -webkit-text-stroke: .3cqw var(--dark);
+  margin: 0;
+  min-height: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
   width: 100%;
-  max-width: 220px;
-  border: none;
-  border-top: 1px solid var(--divider-on-accent);
-  margin: 0 0 14px;
 }
+.category-name.is-longa { font-size: 8.8cqw; line-height: 1.15; }
+.category-name.is-swapping { animation: value-swap .32s ease; }
+
+/* ============ Tela 3 — jogo sorteado ============ */
+
+.game-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+.game-card-body.is-swapping { animation: value-swap .34s ease; }
+
+.game-title {
+  font-family: 'Libre Franklin', sans-serif;
+  font-weight: 700;
+  font-size: 8.28cqw;       /* 30px */
+  line-height: 1.1;
+  margin: 0 0 1.8cqw;
+  text-transform: uppercase;
+}
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .8cqw 4.5cqw;
+  justify-content: center;
+  margin-bottom: 2.6cqw;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5cqw;
+  font-family: 'Libre Franklin', sans-serif;
+  font-weight: 700;
+  font-size: 4.14cqw;       /* 15px */
+}
+.tag img { width: 4.4cqw; display: block; }
+
+.rule {
+  width: 21cqw;             /* 76px */
+  height: 1px;
+  background: var(--rule-accent-card);
+  border: none;
+  margin: 0 0 3.2cqw;
+}
+
 .game-description {
   font-family: 'Roboto', sans-serif;
-  font-size: 13px;
-  line-height: 1.55;
-  overflow-y: auto;
-  margin: 0 0 16px;
+  font-weight: 400;
+  font-size: 3.32cqw;       /* 12px */
+  line-height: 1.6;
+  margin: 0 0 3.5cqw;
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  width: 100%;
 }
 
-/* ---------- Lista de jogos (tela 4) ---------- */
+@keyframes value-swap {
+  from { opacity: 0; transform: translateY(1.5cqw) scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
 
-#screen-lista .ticket-card { padding-top: 28px; }
+/* ============ Tela 4 — lista de jogos ============ */
+
 .list-title {
   font-family: 'Libre Franklin', sans-serif;
-  font-weight: 800;
-  font-size: 26px;
+  font-weight: 700;
+  font-size: 8.28cqw;
+  margin: 0 0 2.2cqw;
   text-transform: uppercase;
-  margin: 0 0 12px;
 }
 .category-select {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background: url('../img/seta-baixo.svg') no-repeat right .5cqw center / 3.4cqw auto;
   border: none;
   border-bottom: 1px solid var(--dark);
-  padding: 0 0 8px;
+  padding: 0 6cqw 2cqw 0;
   font-family: 'Libre Franklin', sans-serif;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 4.14cqw;
   color: var(--dark);
-  margin-bottom: 10px;
+  cursor: pointer;
+  margin-bottom: 2.2cqw;
 }
-.category-select img { width: 12px; height: 8px; }
 .legend {
   display: flex;
-  gap: 12px;
-  font-size: 10px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 700;
-  margin-bottom: 10px;
   flex-wrap: wrap;
   justify-content: center;
+  gap: .8cqw 2.6cqw;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 2.21cqw;       /* 8px */
+  margin-bottom: 2.2cqw;
 }
-.legend span { display: flex; align-items: center; gap: 4px; }
-.legend img { width: 14px; height: 14px; }
+.legend span { display: inline-flex; align-items: center; gap: .9cqw; }
+.legend img { width: 3.6cqw; display: block; }
 
 .game-list {
-  width: 100%;
   list-style: none;
-  margin: 0 0 14px;
-  padding: 0;
-  overflow-y: auto;
+  width: 100%;
+  margin: 0 0 3cqw;
+  padding: 0 1.5cqw 0 0;
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: .7cqw;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark) transparent;
 }
 .game-list li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(35, 48, 45, .08);
-  border-radius: 8px;
-  padding: 9px 12px;
+  gap: 2cqw;
+  background: rgba(35, 48, 45, .09);
+  border-radius: 1.8cqw;
+  padding: 2.2cqw 3cqw;
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
+  font-size: 4.14cqw;
   text-align: left;
+  cursor: pointer;
+  transition: background .12s ease, transform .12s ease;
 }
-.game-list .game-icons { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; }
-.game-list .game-icons img { width: 14px; height: 14px; }
+.game-list li:active { background: rgba(35, 48, 45, .2); transform: scale(.98); }
+.game-list__icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1cqw;
+  flex: none;
+  font-size: 3.6cqw;
+}
+.game-list__icons img { width: 3.9cqw; display: block; }
 
-/* ---------- Overlay: sortear personagem/local ---------- */
+/* ============ Overlay "Sortear de novo" ============ */
 
 .dice-overlay {
   position: absolute;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-}
-.dice-overlay.is-open { opacity: 1; pointer-events: auto; }
-.dice-overlay__panel {
+  top: 0; left: 50%;
+  transform: translateX(-50%);
   width: 100%;
-  max-width: 362px;
-  margin-top: 0;
+  max-width: 362.5px;
+  z-index: 50;
+  container-type: inline-size;
+  container-name: overlay;
+  pointer-events: none;
+  overflow: hidden;
+}
+.dice-overlay__panel {
   background: var(--dark);
   color: var(--near-white);
-  border-radius: 0 0 28px 28px;
-  padding: 18px 22px 20px;
-  transform: translateY(-16px);
-  transition: transform .3s ease;
+  border-radius: 0 0 7.7cqw 7.7cqw;
+  padding: 4cqw 5.5cqw 5.5cqw;
+  transform: translateY(-101%);
+  transition: transform .4s cubic-bezier(.2,.95,.35,1);
 }
+.dice-overlay.is-open { pointer-events: auto; }
 .dice-overlay.is-open .dice-overlay__panel { transform: translateY(0); }
-.dice-overlay__head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.dice-overlay__head img { width: 18px; height: 21px; display: block; }
+
+.dice-overlay__head { display: flex; align-items: center; gap: 3cqw; margin-bottom: 2.5cqw; }
+.dice-overlay__head > img { width: 7cqw; display: block; }
 .dice-overlay__head h2 {
   flex: 1;
   font-family: 'Libre Franklin', sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 4.41cqw;
   letter-spacing: .06em;
   margin: 0;
-  color: var(--divider-on-dark);
+  color: var(--rule-dark-card);
 }
 .dice-overlay__close {
-  width: 19px; height: 19px;
+  width: 5.24cqw;
+  aspect-ratio: 1;
+  border: none;
   border-radius: 50%;
   background: var(--accent);
   color: var(--dark);
-  border: none;
   font-family: 'Libre Franklin', sans-serif;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 3.31cqw;
   line-height: 1;
   cursor: pointer;
+  flex: none;
 }
-.dice-overlay__divider { border: none; border-top: 1px solid var(--divider-on-dark); margin: 0 0 12px; }
-.dice-overlay__cols { display: flex; gap: 24px; }
-.dice-overlay__col { flex: 1; }
-.dice-overlay__col span {
+.dice-overlay__rule {
+  width: 100%;
+  height: 1px;
+  background: var(--rule-dark-card);
+  border: none;
+  margin: 0 0 3cqw;
+}
+.dice-overlay__cols { display: flex; gap: 6cqw; }
+.dice-overlay__col { flex: 1; text-align: left; min-width: 0; }
+.dice-overlay__col > span {
   display: block;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Libre Franklin', sans-serif;
   font-weight: 700;
-  font-size: 10px;
+  font-size: 2.21cqw;
   letter-spacing: .08em;
   text-transform: uppercase;
-  opacity: .65;
-  margin-bottom: 4px;
+  margin-bottom: 1.2cqw;
 }
 .dice-overlay__col button {
   background: none;
   border: none;
   padding: 0;
+  text-align: left;
   color: var(--accent);
   font-family: 'Roboto', sans-serif;
-  font-size: 15px;
-  text-align: left;
+  font-size: 4.14cqw;
+  line-height: 1.25;
   cursor: pointer;
 }
+.dice-overlay__col button.is-swapping { animation: value-swap .3s ease; }
 
-@media (min-width: 431px) {
-  body { background: var(--dark); }
-  .app { box-shadow: 0 0 0 1px rgba(0,255,170,.2); background: var(--bg); }
+@media (min-width: 431px) { body { background: #101917; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-carousel__track, .dice-badge__dice { animation: none; }
+  .screen.is-flip-out .ticket-card,
+  .screen.is-flip-in  .ticket-card { animation-duration: .01ms; }
 }

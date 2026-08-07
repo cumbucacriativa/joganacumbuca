@@ -22,18 +22,40 @@ seção antiga logo abaixo, mantida só como histórico do processo.
 `letter-spacing: 0.06em`) + **Roboto** (descrição de jogo, legendas, nomes de jogo na lista).
 Ambas gratuitas no Google Fonts, carregadas em `assets/css/style.css`.
 
-**Assets:** os SVGs exportados pelo cliente ficam em `_Docs/SVGs/` (fonte de referência, um
-por tela). Os ícones usados de fato no app estão em `assets/icons/` — a maioria é cópia direta
-dos arquivos exportados (cores exatas); o ícone de marca (máscaras+shuffle) e o ícone de
-música foram recriados à mão no mesmo estilo, porque os arquivos exportados combinavam esse
-ícone com outros elementos (badge/cartão inteiro) ou, no caso da música, não foram exportados
-— ver nota em `assets/icons/` e no changelog.
+**Assets — regra do projeto: nunca recriar ícone à mão.** Os SVGs exportados pelo cliente ficam
+em `_Docs/SVGs/` (referência original, organizados por tela) e são **copiados sem alteração**
+para `assets/img/`, que é o que o app usa. Uma primeira tentativa recriou máscaras/ícones à mão
+e ficou visivelmente errada — foi descartada. Se faltar um ícone, pedir a exportação em vez de
+desenhar.
 
-**Cartão "ticket"**, confirmado pelos SVGs: `border-radius: 27px`, borda dupla (externa 1px +
-interna inset ~24px, `border-radius: 20px`) e dois pontos decorativos de 10px (canto
-superior-direito e inferior-esquerdo). A variante da tela de lista (`Carta Verde sem
-ornamentos.svg`) não tem borda dupla, pontos nem ícone de marca — variante "plain" implementada
-em CSS (`.ticket-card--plain`).
+| `assets/img/` | Origem em `_Docs/SVGs/` |
+|---|---|
+| `logo-completo.svg` | `1 - Tela Inicial/Logo completo.svg` |
+| `carta-escura.svg` | `1 - Tela Inicial/Carta Verde Escura.svg` |
+| `carta-branca.svg` | `2 - Tela de Categorias/carta branca.svg` |
+| `carta-verde.svg` | `3 - Tela de Jogo/carta-verde.svg` |
+| `carta-verde-plana.svg` | `4 - Lista de Jogos/Carta Verde sem ornamentos.svg` |
+| `carta-rodape.svg` | `1 - Tela Inicial/carta-rodapé.svg` |
+| `dado.svg` | `1.1 - Botão Aleatório/dado.svg` |
+| `btn-shuffle.svg` | `3 - Tela de Jogo/botão sortear apenas ícone.svg` |
+| `seta-cima.svg` / `seta-baixo.svg` | `2 - Tela de Categorias/seta pra cima\|baixo.svg` |
+| `tag-aquecimento.svg` / `tag-mediador.svg` / `tag-participantes.svg` | `4 - Lista de Jogos/ícone *.svg` |
+
+**Faltando:** ícone de música (aparece na linha "Musical" da tela de lista no protótipo, mas
+não foi exportado). Enquanto não vier, a coluna `musica` do CSV não exibe ícone.
+
+**Como as cartas são montadas:** cada carta usa o SVG exportado inteiro como `background-image`
+(via `background-size: 100% 100%`), então ornamentos, borda dupla, pontinhos e o ícone de
+máscaras já vêm posicionados exatamente como no XD — nada disso é redesenhado em CSS. O
+conteúdo (títulos, tags, botões) fica num `.card-inner` sobreposto, com `padding-top: 25cqw`
+para começar abaixo do ícone de máscaras que o SVG já desenha.
+
+**Escala:** `.ticket-card` tem `container-type: inline-size` e **nenhum padding** (o padding
+mora no `.card-inner`), de forma que `1cqw` = 1% da largura total da carta. Assim todas as
+medidas do XD viram cqw direto na escala original de 362,5px: botão de 106px → `29.24cqw`,
+título de 30px → `8.28cqw`, e por aí. Se voltar padding para `.ticket-card`, todas as medidas
+encolhem junto (as unidades de container usam o *content box*) — foi um bug real durante a
+implementação.
 
 ---
 

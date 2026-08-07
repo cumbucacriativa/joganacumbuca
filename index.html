@@ -11,104 +11,94 @@
 <body>
 <div class="app">
 
-  <button class="dice-badge" id="dice-badge" aria-label="Sortear personagem e localização">
-    <img src="assets/icons/dice.svg" alt="">
+  <button class="dice-badge" id="dice-badge" aria-label="Sortear local e personagem">
+    <span class="dice-badge__shape"></span>
+    <img class="dice-badge__dice" src="assets/img/dado.svg" alt="">
   </button>
 
   <div class="screens" id="screens">
 
-    <section class="screen" id="screen-inicio">
-      <div class="ticket-card ticket-card--dark">
-        <span class="dot"></span>
-        <div class="wordmark"><img src="assets/logo.svg" alt="Joga na Cumbuca"></div>
-        <button class="btn btn--accent" id="btn-iniciar">INICIAR</button>
+    <!-- 1 — Tela Inicial -->
+    <section class="screen is-active" id="screen-inicio">
+      <div class="ticket-card card--escura">
+        <div class="card-inner card-inner--centro">
+          <img class="wordmark" src="assets/img/logo-completo.svg" alt="Joga na Cumbuca">
+          <button class="btn btn--accent btn--w106" id="btn-iniciar">INICIAR</button>
+        </div>
       </div>
     </section>
 
+    <!-- 2 — Tela de Categorias -->
     <section class="screen" id="screen-categoria">
-      <div class="ticket-card ticket-card--white">
-        <span class="dot"></span>
-        <div class="ticket-card__brand js-go-home"><img src="assets/icons/brand-icon-on-white.svg" alt="Joga na Cumbuca"></div>
-        <div class="category-nav">
-          <button id="cat-up" aria-label="Categoria anterior"><img src="assets/icons/chevron-up.svg" alt=""></button>
-          <h1 class="ticket-card__title category-name" id="category-name"></h1>
-          <button id="cat-down" aria-label="Próxima categoria"><img src="assets/icons/chevron-down.svg" alt=""></button>
-        </div>
-        <div class="btn-row">
-          <button class="btn btn--accent" id="btn-sortear-categoria">SORTEAR</button>
-          <button class="btn btn--accent" id="btn-lista">LISTA</button>
+      <div class="ticket-card card--branca">
+        <div class="card-inner">
+          <div class="category-nav">
+            <button id="cat-up" aria-label="Categoria anterior"><img src="assets/img/seta-cima.svg" alt=""></button>
+            <h1 class="category-name" id="category-name"></h1>
+            <button id="cat-down" aria-label="Próxima categoria"><img src="assets/img/seta-baixo.svg" alt=""></button>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn--accent btn--w106" id="btn-sortear">SORTEAR</button>
+            <button class="btn btn--accent btn--w106" id="btn-lista">LISTA</button>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- 3 — Tela de Jogo -->
     <section class="screen" id="screen-jogo">
-      <div class="ticket-card ticket-card--accent">
-        <span class="dot"></span>
-        <div class="ticket-card__brand js-go-home"><img src="assets/icons/brand-icon-on-accent.svg" alt="Joga na Cumbuca"></div>
-        <h1 class="ticket-card__title" id="game-title"></h1>
-        <div class="tag-row" id="game-tags"></div>
-        <hr class="divider">
-        <p class="game-description" id="game-description"></p>
-        <div class="btn-row">
-          <button class="btn btn--dark btn--pill-icon" id="btn-resortear" aria-label="Sortear outro jogo">
-            <img src="assets/icons/shuffle.svg" alt="">
-          </button>
-          <button class="btn btn--dark btn--wide" id="btn-opcoes">+ OPÇÕES</button>
+      <div class="ticket-card card--verde">
+        <div class="card-inner">
+          <div class="game-card-body" id="game-card-body">
+            <h1 class="game-title" id="game-title"></h1>
+            <div class="tag-row" id="game-tags"></div>
+            <hr class="rule">
+            <p class="game-description" id="game-description"></p>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn--dark btn--shuffle" id="btn-resortear" aria-label="Sortear outro jogo">
+              <img src="assets/img/btn-shuffle.svg" alt="">
+            </button>
+            <button class="btn btn--dark btn--w183" id="btn-opcoes">+ OPÇÕES</button>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- 4 — Lista de Jogos -->
     <section class="screen" id="screen-lista">
-      <div class="ticket-card ticket-card--accent ticket-card--plain">
-        <h1 class="list-title">LISTA DE JOGOS</h1>
-        <div class="category-select-wrap" style="width:100%;position:relative;">
-          <select class="category-select" id="category-select"></select>
-          <img src="assets/icons/chevron-down.svg" alt="" style="position:absolute;right:2px;top:8px;pointer-events:none;">
-        </div>
-        <div class="legend">
-          <span><img src="assets/icons/tag-aquecimento.svg" alt="">Aquecimento</span>
-          <span><img src="assets/icons/tag-mediador.svg" alt="">Precisa de Mediador</span>
-          <span><img src="assets/icons/tag-participantes.svg" alt="">Número de Participantes</span>
-        </div>
-        <ul class="game-list" id="game-list"></ul>
-        <div class="btn-row">
-          <button class="btn btn--dark btn--wide" id="btn-aleatorio">ALEATÓRIO</button>
-          <button class="btn btn--dark btn--icon" id="btn-fechar-lista" aria-label="Fechar lista">X</button>
+      <div class="ticket-card card--verde-plana">
+        <div class="card-inner card-inner--plana">
+          <h1 class="list-title">LISTA DE JOGOS</h1>
+          <select class="category-select" id="category-select" aria-label="Filtrar por categoria"></select>
+          <div class="legend">
+            <span><img src="assets/img/tag-aquecimento.svg" alt="">Aquecimento</span>
+            <span><img src="assets/img/tag-mediador.svg" alt="">Precisa de Mediador</span>
+            <span><img src="assets/img/tag-participantes.svg" alt="">Número de Participantes</span>
+          </div>
+          <ul class="game-list" id="game-list"></ul>
+          <div class="btn-row">
+            <button class="btn btn--dark btn--w252" id="btn-aleatorio">ALEATÓRIO</button>
+            <button class="btn btn--dark btn--x" id="btn-fechar-lista" aria-label="Fechar lista">X</button>
+          </div>
         </div>
       </div>
     </section>
 
   </div>
 
-  <div class="footer-carousel">
-    <div class="footer-carousel__track">
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-      <div class="footer-card"><img src="assets/icons/brand-icon-on-dark.svg" alt=""></div>
-    </div>
+  <div class="footer-carousel" aria-hidden="true">
+    <div class="footer-carousel__track" id="footer-track"></div>
   </div>
 
   <div class="dice-overlay" id="dice-overlay">
     <div class="dice-overlay__panel">
       <div class="dice-overlay__head">
-        <img src="assets/icons/dice.svg" alt="">
+        <img src="assets/img/dado.svg" alt="">
         <h2>SORTEAR DE NOVO</h2>
         <button class="dice-overlay__close" id="dice-overlay-close" aria-label="Fechar">X</button>
       </div>
-      <hr class="dice-overlay__divider">
+      <hr class="dice-overlay__rule">
       <div class="dice-overlay__cols">
         <div class="dice-overlay__col">
           <span>Local</span>

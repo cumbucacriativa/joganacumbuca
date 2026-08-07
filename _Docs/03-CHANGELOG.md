@@ -46,6 +46,35 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 - Categoria/descrição de 4 dos 5 jogos de exemplo é placeholder (ver `02-ESCOPO.md`).
 - PWA/offline e filtro ativo por mediador/aquecimento/música — ver `02-ESCOPO.md`.
 
+## [0.3.0] — 2026-08-07
+
+Refação do visual depois do cliente apontar que "todos os SVGs estão bugados".
+
+### Corrigido
+- **Ícones desenhados à mão substituídos pelos SVGs reais.** A v0.2.0 recriava máscaras,
+  ornamentos da carta e ícones à mão em CSS/SVG — ficou visivelmente errado. Agora cada carta
+  usa o SVG exportado inteiro como `background-image` e todos os ícones são cópia byte-a-byte
+  de `_Docs/SVGs/`. Ver tabela de origem em `05-DESIGN-VISUAL.md`.
+- **Logo da tela inicial**: usava `Logo.svg` (versão antiga, branco/cinza, sem as máscaras) em
+  vez de `1 - Tela Inicial/Logo completo.svg`.
+- **Escala de todas as medidas**: `.ticket-card` tinha padding, e unidades de container (`cqw`)
+  usam o *content box* — logo tudo renderizava menor que o design. Padding movido para um
+  `.card-inner` sobreposto; agora botões/títulos batem com o XD na casa do décimo de pixel.
+- **Seta gigante na tela de lista**: o `<img>` da seta não casava com a regra CSS de tamanho e
+  caía no tamanho padrão de SVG sem `width`. Virou `background-image` do próprio `<select>`.
+- **Animação de carta girando**: não rodava (a `perspective` estava num ancestral errado e a
+  troca de classe não dava reflow). Reescrita como duas animações sequenciais — a carta atual
+  gira para sair, a nova gira para entrar.
+- **Navegação descartada em toque rápido**: o guard `flipping` ignorava cliques durante o giro.
+  Trocado por cancelamento de timers — um toque novo redireciona em vez de sumir.
+- **Botão "+ OPÇÕES"** agora leva de volta para a lista de jogos (era placeholder sem função).
+- **Tela de categorias** agora inclui "Todas as Categorias", igual ao filtro da tela de lista.
+- **Badge do dado**: ganhou animação de rolagem ao toque e um balanço sutil em repouso; o
+  overlay deixou de ocupar a tela inteira e agora tem a largura da carta, como no protótipo.
+
+### Pendente
+- Ícone de música não foi exportado do XD — linha "Musical" fica sem ícone até vir o arquivo.
+
 ## [0.2.1] — 2026-08-07
 
 ### Adicionado
