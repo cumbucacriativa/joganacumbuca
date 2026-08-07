@@ -86,7 +86,10 @@ body {
   position: absolute;
   left: 0; right: 0; bottom: 0;
   height: 26cqw;
-  overflow: hidden;
+  /* overflow visível de propósito: o pulo das cartas (footer-hop) precisa de espaço
+     acima do container. O recorte lateral do carrossel infinito continua garantido
+     pelo overflow:hidden do .app, que é quem realmente define os limites da tela. */
+  overflow: visible;
   z-index: 5;
   pointer-events: none;
 }
@@ -151,6 +154,10 @@ body {
   padding: 19.5cqw 3.5cqw 23cqw;
   perspective: 1400px;
   z-index: 10;
+  /* a tela inteira (inclusive o padding vazio de baixo) fica por cima do carrossel
+     do rodapé no empilhamento — sem isso, cliques nas cartinhas nunca chegavam lá,
+     mesmo elas aparecendo visualmente por baixo da área transparente da tela. */
+  pointer-events: none;
 }
 .screen.is-active { display: flex; }
 
@@ -180,6 +187,7 @@ body {
   container-type: inline-size;
   container-name: card;
   transform-style: preserve-3d;
+  pointer-events: auto;
 }
 .card-inner {
   position: absolute;
