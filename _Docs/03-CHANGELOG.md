@@ -2,6 +2,29 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
+## [0.6.1] — 2026-08-07
+
+### Removido
+- **8 jogos quase-clones removidos de `data/jogos.csv`** (93 → 85 jogos). O banco tinha sido
+  gerado com ajuda do Gemini e várias entradas repetiam a mesma premissa com nome/tema
+  diferente. Removidos, cada um por ser clone de um jogo mantido:
+  - `Novas Opções` e `Diretor da Plateia` — mesma mecânica de "Jogo do Troca" (um sinal manda
+    refazer a última fala/ação na hora), só trocando quem dá o sinal.
+  - `Gêneros Literários` — mesma mecânica de "Estilos de Cinema" (trocar o estilo da cena no
+    meio, a pedido do mediador), só trocando cinema por literatura.
+  - `Tribunal do Juri` — subconjunto de "Tribunal do Improviso" (mesma ideia de julgamento
+    absurdo com veredito, com menos papéis definidos).
+  - `Festa dos Tipos` — mesma mecânica de "Escolinha" (adivinhar a característica secreta dos
+    outros por meio de conversa), só trocando escola por festa.
+  - `Papéis Sorteados` — mesma mecânica de "Frase Surpresa" (uma frase escrita antecipadamente
+    é integrada à cena em algum momento).
+  - `Consultório Estranho` — o banco tinha 5 jogos no formato "autoridade absurda explica algo
+    com total convicção" (Especialistas, Consultório Estranho, Manual de Instruções, Guia de
+    Viagem Inusitado, Entrevista com o Futuro); esse era o mais redundante do grupo.
+  - `Perguntas com Respiração` — além de ser cópia de "Uma Palavra de Cada Vez" (uma palavra
+    por vez construindo a história), o título nem batia com a própria descrição no CSV — bug
+    de geração, não só duplicata.
+
 ## [0.6.0] — 2026-08-07
 
 ### Adicionado
