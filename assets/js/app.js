@@ -139,27 +139,83 @@ function sortearJogo(cat) {
 const selectEl = document.getElementById('category-select');
 const listEl = document.getElementById('game-list');
 
+// linha de jogo reutilizada tanto na lista por categoria quanto nos resultados da busca
+function linhaDeJogo(j) {
+  const icons = [];
+  if (j.aquecimento === 'sim') icons.push('<img src="assets/img/tag-aquecimento.svg" alt="Aquecimento">');
+  if (j.mediador === 'sim') icons.push('<img src="assets/img/tag-mediador.svg" alt="Mediador">');
+  if (j.musica === 'sim') icons.push('<img src="assets/img/tag-musica.svg" alt="Precisa de música">');
+  if (j.participantes) icons.push(`${j.participantes}<img src="assets/img/tag-participantes.svg" alt="Participantes">`);
+  return `<li data-jogo="${j.jogo}"><span>${j.jogo}</span><span class="game-list__icons">${icons.join('')}</span></li>`;
+}
+
 function renderLista() {
-  listEl.innerHTML = jogosDe(state.filtroLista).map((j) => {
-    const icons = [];
-    if (j.aquecimento === 'sim') icons.push('<img src="assets/img/tag-aquecimento.svg" alt="Aquecimento">');
-    if (j.mediador === 'sim') icons.push('<img src="assets/img/tag-mediador.svg" alt="Mediador">');
-    if (j.musica === 'sim') icons.push('<img src="assets/img/tag-musica.svg" alt="Precisa de música">');
-    if (j.participantes) icons.push(`${j.participantes}<img src="assets/img/tag-participantes.svg" alt="Participantes">`);
-    return `<li data-jogo="${j.jogo}"><span>${j.jogo}</span><span class="game-list__icons">${icons.join('')}</span></li>`;
-  }).join('');
+  listEl.innerHTML = jogosDe(state.filtroLista).map(linhaDeJogo).join('');
+}
+
+function abrirJogoDaLinha(li) {
+  const jogo = state.jogos.find((j) => j.jogo === li.dataset.jogo);
+  if (jogo) { renderJogo(jogo); goTo('screen-jogo'); }
 }
 
 listEl.addEventListener('click', (e) => {
   const li = e.target.closest('li');
-  if (!li) return;
-  const jogo = state.jogos.find((j) => j.jogo === li.dataset.jogo);
-  if (jogo) { renderJogo(jogo); goTo('screen-jogo'); }
+  if (li) abrirJogoDaLinha(li);
 });
 
 selectEl.addEventListener('change', () => {
   state.filtroLista = selectEl.value;
   renderLista();
+});
+
+/* ---------- Busca por texto (jogo, categoria ou trecho da regra) ---------- */
+
+const searchBadgeEl = document.getElementById('search-badge');
+const searchOverlayEl = document.getElementById('search-overlay');
+const searchInputEl = document.getElementById('search-input');
+const searchResultsEl = document.getElementById('search-results');
+const searchHintEl = document.getElementById('search-hint');
+
+// tira acento pra "musica" achar "Música" também
+const normalizar = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+function renderBusca() {
+  const termo = normalizar(searchInputEl.value.trim());
+  searchHintEl.classList.toggle('is-hidden', termo.length > 0);
+
+  if (!termo) { searchResultsEl.innerHTML = ''; return; }
+
+  const achados = state.jogos.filter((j) =>
+    normalizar(j.jogo).includes(termo) ||
+    normalizar(j.categoria).includes(termo) ||
+    normalizar(j.descricao).includes(termo));
+
+  searchResultsEl.innerHTML = achados.length
+    ? achados.map(linhaDeJogo).join('')
+    : '<li class="search-overlay__empty">Nenhum jogo encontrado. Tenta outra palavra.</li>';
+}
+
+function abrirBusca() {
+  closeOverlay(); // só um painel aberto por vez
+  searchBadgeEl.classList.add('is-open');
+  searchOverlayEl.classList.add('is-open');
+  setTimeout(() => searchInputEl.focus(), 250);
+}
+function fecharBusca() {
+  searchOverlayEl.classList.remove('is-open');
+  searchBadgeEl.classList.remove('is-open');
+  searchInputEl.value = '';
+  renderBusca();
+}
+
+searchBadgeEl.addEventListener('click', abrirBusca);
+document.getElementById('search-overlay-close').addEventListener('click', fecharBusca);
+searchInputEl.addEventListener('input', renderBusca);
+searchResultsEl.addEventListener('click', (e) => {
+  const li = e.target.closest('li[data-jogo]');
+  if (!li) return;
+  abrirJogoDaLinha(li);
+  fecharBusca();
 });
 
 /* ---------- Overlay do dado: local e personagem, sorteios independentes ---------- */
@@ -170,6 +226,7 @@ const btnLocal = document.getElementById('btn-local');
 const btnPersonagem = document.getElementById('btn-personagem');
 
 function openOverlay() {
+  fecharBusca(); // só um painel aberto por vez
   replay(badgeEl, 'is-rolling');
   setTimeout(() => {
     badgeEl.classList.add('is-open');

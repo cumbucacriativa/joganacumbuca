@@ -117,6 +117,18 @@
     </div>
   </div>
 
+  <div class="search-overlay" id="search-overlay">
+    <div class="search-overlay__panel">
+      <div class="search-overlay__head">
+        <img src="assets/img/lupa.svg" alt="">
+        <input type="search" id="search-input" placeholder="Buscar jogo..." autocomplete="off" enterkeyhint="search">
+        <button class="dice-overlay__close" id="search-overlay-close" aria-label="Fechar">X</button>
+      </div>
+      <p class="search-overlay__hint" id="search-hint">Digite o nome de um jogo, categoria ou palavra da regra.</p>
+      <ul class="game-list search-overlay__results" id="search-results"></ul>
+    </div>
+  </div>
+
 </div>
 <script src="assets/js/app.js"></script>
 </body>

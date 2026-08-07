@@ -80,6 +80,31 @@ body {
   100% { transform: translateX(-50%) rotate(720deg) scale(1); }
 }
 
+/* ============ Badge de busca (canto superior direito, todas as telas) ============ */
+/* Não existe referência disso no design do XD (funcionalidade nova) — ícone e badge
+   criados do zero, seguindo o mesmo estilo visual do badge do dado (fundo escuro,
+   ícone accent). Se o cliente exportar um ícone de lupa oficial depois, trocar aqui. */
+
+.search-badge {
+  position: absolute;
+  top: 2.5cqw;
+  right: 3cqw;
+  width: 10.5cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--dark);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 40;
+  transition: opacity .2s ease, transform .12s ease;
+}
+.search-badge img { width: 52%; display: block; }
+.search-badge:active { transform: scale(.9); }
+.search-badge.is-open { opacity: 0; pointer-events: none; }
+
 /* ============ Carrossel de cartas do rodapé ============ */
 
 .footer-carousel {
@@ -505,6 +530,74 @@ body {
   cursor: pointer;
 }
 .dice-overlay__col button.is-swapping { animation: value-swap .3s ease; }
+
+/* ============ Overlay de busca ============ */
+/* Mesmo mecanismo do overlay do dado (painel escuro descendo do topo). */
+
+.search-overlay {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 362.5px;
+  z-index: 51;
+  container-type: inline-size;
+  container-name: search;
+  pointer-events: none;
+  overflow: hidden;
+}
+.search-overlay__panel {
+  background: var(--dark);
+  color: var(--near-white);
+  border-radius: 0 0 7.7cqw 7.7cqw;
+  padding: 4cqw 5.5cqw 4.5cqw;
+  max-height: 82dvh;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-101%);
+  transition: transform .4s cubic-bezier(.2,.95,.35,1);
+}
+.search-overlay.is-open { pointer-events: auto; }
+.search-overlay.is-open .search-overlay__panel { transform: translateY(0); }
+
+.search-overlay__head { display: flex; align-items: center; gap: 3cqw; margin-bottom: 1.5cqw; }
+.search-overlay__head > img { width: 6cqw; flex: none; display: block; }
+.search-overlay__head input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--rule-dark-card);
+  color: var(--near-white);
+  font-family: 'Roboto', sans-serif;
+  font-size: 4.14cqw;
+  padding: 0 0 1cqw;
+}
+.search-overlay__head input::placeholder { color: var(--near-white); opacity: .5; }
+.search-overlay__head input:focus { outline: none; border-bottom-color: var(--accent); }
+
+.search-overlay__hint {
+  font-family: 'Roboto', sans-serif;
+  font-size: 3.3cqw;
+  opacity: .55;
+  margin: 0 0 2.5cqw;
+}
+.search-overlay__hint.is-hidden { display: none; }
+
+.search-overlay__results {
+  flex: none;
+  max-height: 55dvh;
+  margin: 0;
+}
+.search-overlay__results li { background: rgba(249, 255, 252, .1); color: var(--near-white); }
+.search-overlay__results li:active { background: rgba(249, 255, 252, .22); }
+.search-overlay__results .search-overlay__empty {
+  background: none;
+  opacity: .6;
+  font-weight: 400;
+  cursor: default;
+  justify-content: center;
+}
 
 @media (min-width: 431px) { body { background: #101917; } }
 
