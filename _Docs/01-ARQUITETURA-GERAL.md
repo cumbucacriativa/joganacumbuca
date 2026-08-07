@@ -65,20 +65,31 @@ pra remover os que repetiam a mesma premissa — ver `03-CHANGELOG.md` v0.6.1).
 | `Localizacao` | texto | Lista de localizações pro sorteio aleatório |
 | `Filme / Livro` | texto | Lista de filmes/livros pro sorteio aleatório |
 | `Adjetivo / Característica` | texto | Lista de adjetivos/características pro sorteio aleatório |
+| `Frase` | texto | Lista de frases pro sorteio aleatório. Coluna criada mas ainda **sem dados** — cliente vai preencher depois. Enquanto vazia, o botão correspondente fica com o texto padrão ("Frase aleatória"). |
 
-Quatro colunas independentes — não são pares linha-a-linha, cada uma é sorteada separadamente
+Cinco colunas independentes — não são pares linha-a-linha, cada uma é sorteada separadamente
 dentro da própria lista (não precisam nem ter a mesma quantidade de linhas preenchidas). O
-overlay do dado (acionado a qualquer momento, em qualquer tela) tem um botão pra cada uma das
-quatro.
+overlay do dado (acionado a qualquer momento, em qualquer tela) tem um botão pra cada uma —
+`Frase` ocupa a linha inteira do grid (`.dice-overlay__col--larga`), as outras quatro ficam
+numa grade 2x2. **Abrir o dado já sorteia as cinco de uma vez**; clicar no título
+"SORTEAR DE NOVO" (virou botão) sorteia tudo de novo; cada botão individual continua
+re-sorteando só o campo dele.
 
 ### Sorteio sem repetição ("sacola")
 
-Jogo (por categoria/filtro), personagem, local, filme/livro e adjetivo usam o mesmo mecanismo
-em `assets/js/app.js` (`criarSacola`): embaralha a lista inteira e vai tirando um item por vez;
-só reembaralha quando esgota todas as opções, e evita repetir de novo o último item tirado bem
-na emenda entre uma rodada e a próxima. Existe uma sacola por categoria de jogo (chave = nome
-da categoria ou "Todas as Categorias") e uma sacola só pra cada uma das quatro colunas de
-`aleatoriedades.csv`.
+Jogo (por categoria/filtro), personagem, local, filme/livro, adjetivo e frase usam o mesmo
+mecanismo em `assets/js/app.js` (`criarSacola`): embaralha a lista inteira e vai tirando um
+item por vez; só reembaralha quando esgota todas as opções, e evita repetir de novo o último
+item tirado bem na emenda entre uma rodada e a próxima. Existe uma sacola por categoria de jogo
+(chave = nome da categoria ou "Todas as Categorias") e uma sacola só pra cada uma das cinco
+colunas de `aleatoriedades.csv`.
+
+### Ordenação da lista de jogos
+
+`jogosDe(cat)` e a busca por texto sempre devolvem os resultados em **ordem alfabética**
+(`ordenarPorNome`, `localeCompare` com `pt-BR`) — vale pra qualquer filtro de categoria e pra
+busca. É só na exibição: `data/jogos.csv` continua na ordem em que as linhas foram cadastradas,
+nunca é reescrito por causa disso.
 
 ## Administração: cadastrar e excluir jogo (n8n)
 

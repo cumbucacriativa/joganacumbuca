@@ -42,12 +42,15 @@ const state = {
   locais: [],
   filmes: [],
   adjetivos: [],
+  frases: [],
   catIndex: 0,
   jogoAtual: null,
   filtroLista: TODAS,
 };
 
-const jogosDe = (cat) => (!cat || cat === TODAS ? state.jogos : state.jogos.filter((j) => j.categoria === cat));
+// ordem alfabética só na exibição — o CSV continua na ordem em que as linhas foram cadastradas
+const ordenarPorNome = (lista) => lista.slice().sort((a, b) => a.jogo.localeCompare(b.jogo, 'pt-BR', { sensitivity: 'base' }));
+const jogosDe = (cat) => ordenarPorNome(!cat || cat === TODAS ? state.jogos : state.jogos.filter((j) => j.categoria === cat));
 
 /* ---------- Sacola: sorteia sem repetir até esgotar todas as opções ---------- */
 /* Em vez de Math.random puro (que pode repetir a mesma coisa várias vezes seguidas
@@ -95,6 +98,7 @@ let sacolaPersonagens = null;
 let sacolaLocais = null;
 let sacolaFilmes = null;
 let sacolaAdjetivos = null;
+let sacolaFrases = null;
 const tirarPersonagem = () => {
   if (!sacolaPersonagens) sacolaPersonagens = criarSacola(state.personagens);
   return sacolaPersonagens.tirar();
@@ -110,6 +114,10 @@ const tirarFilme = () => {
 const tirarAdjetivo = () => {
   if (!sacolaAdjetivos) sacolaAdjetivos = criarSacola(state.adjetivos);
   return sacolaAdjetivos.tirar();
+};
+const tirarFrase = () => {
+  if (!sacolaFrases) sacolaFrases = criarSacola(state.frases);
+  return sacolaFrases.tirar();
 };
 
 function replay(el, cls) {
@@ -251,11 +259,11 @@ function renderBusca() {
 
   if (!termo) { searchResultsEl.innerHTML = ''; return; }
 
-  const achados = state.jogos.filter((j) =>
+  const achados = ordenarPorNome(state.jogos.filter((j) =>
     j.id === termo.replace('#', '') ||
     normalizar(j.jogo).includes(termo) ||
     normalizar(j.categoria).includes(termo) ||
-    normalizar(j.descricao).includes(termo));
+    normalizar(j.descricao).includes(termo)));
 
   searchResultsEl.innerHTML = achados.length
     ? achados.map(linhaDeJogo).join('')
@@ -289,14 +297,32 @@ searchResultsEl.addEventListener('click', (e) => {
 
 const badgeEl = document.getElementById('dice-badge');
 const overlayEl = document.getElementById('dice-overlay');
-const btnLocal = document.getElementById('btn-local');
-const btnPersonagem = document.getElementById('btn-personagem');
-const btnFilme = document.getElementById('btn-filme');
-const btnAdjetivo = document.getElementById('btn-adjetivo');
+const btnSortearTudo = document.getElementById('btn-sortear-tudo');
+
+// cada botão do overlay junto com a função que sorteia o valor dele — usado tanto
+// pro clique individual quanto pra "sortear tudo de novo" (abrir o dado / clicar no título)
+const camposDoDado = [
+  { btn: document.getElementById('btn-local'), tirar: tirarLocal },
+  { btn: document.getElementById('btn-personagem'), tirar: tirarPersonagem },
+  { btn: document.getElementById('btn-filme'), tirar: tirarFilme },
+  { btn: document.getElementById('btn-adjetivo'), tirar: tirarAdjetivo },
+  { btn: document.getElementById('btn-frase'), tirar: tirarFrase },
+];
+
+function rolarCampo(campo) {
+  const valor = campo.tirar();
+  if (!valor) return; // coluna ainda sem dados no CSV (ex: Frase, por enquanto) — deixa o texto padrão
+  campo.btn.textContent = valor;
+  replay(campo.btn, 'is-swapping');
+}
+function rolarTudo() {
+  camposDoDado.forEach(rolarCampo);
+}
 
 function openOverlay() {
   fecharBusca(); // só um painel aberto por vez
   replay(badgeEl, 'is-rolling');
+  rolarTudo();
   setTimeout(() => {
     badgeEl.classList.add('is-open');
     overlayEl.classList.add('is-open');
@@ -309,31 +335,9 @@ function closeOverlay() {
 
 badgeEl.addEventListener('click', openOverlay);
 document.getElementById('dice-overlay-close').addEventListener('click', closeOverlay);
+btnSortearTudo.addEventListener('click', rolarTudo);
 
-btnLocal.addEventListener('click', () => {
-  const local = tirarLocal();
-  if (!local) return;
-  btnLocal.textContent = local;
-  replay(btnLocal, 'is-swapping');
-});
-btnPersonagem.addEventListener('click', () => {
-  const personagem = tirarPersonagem();
-  if (!personagem) return;
-  btnPersonagem.textContent = personagem;
-  replay(btnPersonagem, 'is-swapping');
-});
-btnFilme.addEventListener('click', () => {
-  const filme = tirarFilme();
-  if (!filme) return;
-  btnFilme.textContent = filme;
-  replay(btnFilme, 'is-swapping');
-});
-btnAdjetivo.addEventListener('click', () => {
-  const adjetivo = tirarAdjetivo();
-  if (!adjetivo) return;
-  btnAdjetivo.textContent = adjetivo;
-  replay(btnAdjetivo, 'is-swapping');
-});
+camposDoDado.forEach((campo) => campo.btn.addEventListener('click', () => rolarCampo(campo)));
 
 /* ---------- Navegação ---------- */
 
@@ -382,7 +386,11 @@ const ADD_FORM_URL = 'https://lava-automations-n8n.tgervl.easypanel.host/form/9b
 const DELETE_WEBHOOK_URL = 'https://lava-automations-n8n.tgervl.easypanel.host/webhook/4bd6eeb9-f48a-4bc7-891a-77d002b1e2f9/joga-na-cumbuca-excluir';
 
 const admOk = () => sessionStorage.getItem('jncAdmin') === '1';
-const admMarcarOk = () => sessionStorage.setItem('jncAdmin', '1');
+function admMarcarOk() {
+  sessionStorage.setItem('jncAdmin', '1');
+  // o ícone de excluir só existe pra quem já provou que é admin nesta sessão
+  document.getElementById('btn-excluir-jogo').classList.add('is-visible');
+}
 
 const adminOverlayEl = document.getElementById('admin-overlay');
 const adminInputEl = document.getElementById('admin-input');
@@ -579,10 +587,14 @@ async function boot() {
   state.locais = aleatorio.map((r) => r.Localizacao).filter(Boolean);
   state.filmes = aleatorio.map((r) => r['Filme / Livro']).filter(Boolean);
   state.adjetivos = aleatorio.map((r) => r['Adjetivo / Característica']).filter(Boolean);
+  state.frases = aleatorio.map((r) => r.Frase).filter(Boolean);
 
   selectEl.innerHTML = state.categorias.map((c) => `<option value="${c}">${c}</option>`).join('');
   renderCategoria();
   renderLista();
+
+  // se a senha já foi confirmada nesta aba antes (ex: recarregou a página), mantém o ícone visível
+  if (admOk()) btnExcluirEl.classList.add('is-visible');
 }
 
 boot();

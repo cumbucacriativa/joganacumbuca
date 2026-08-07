@@ -2,6 +2,29 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
+## [0.9.0] — 2026-08-07
+
+### Corrigido
+- **Ícone de excluir sobrepondo o "+ OPÇÕES"** — estava na área de baixo da carta que a fileira
+  de botões já ocupa. Movido pro respiro que sobra abaixo dos botões (mais pra dentro do canto,
+  menor).
+- **Ícone de excluir agora só aparece depois da senha** — antes ficava sempre visível na carta
+  (e só pedia a senha ao clicar). Agora começa escondido (`display:none`) e só some a visto
+  depois que a senha é confirmada pelo botão "+", uma vez por sessão.
+
+### Adicionado
+- **Dado sorteia tudo de uma vez ao abrir** — antes cada campo (Local, Personagem, Filme/Livro,
+  Adjetivo) só sorteava com um clique individual. Agora, ao clicar no badge do dado, os cinco
+  já vêm sorteados. O título "SORTEAR DE NOVO" virou botão — clicar nele sorteia tudo de novo.
+  Os botões individuais continuam funcionando pra re-sortear só um campo específico.
+- **Coluna `Frase` em `data/aleatoriedades.csv`** — quinta opção do dado, ocupando a linha
+  inteira do overlay (é maior que as outras, pensada pra frase/texto mais longo). Só o
+  cabeçalho foi adicionado — as 500 linhas existentes ficam sem valor nessa coluna até o
+  cliente preencher; o botão mostra o texto padrão até lá.
+- **Lista de jogos em ordem alfabética** — em qualquer filtro (categoria ou "Todas as
+  Categorias") e na busca. Só na exibição — `data/jogos.csv` continua na ordem de cadastro,
+  sem reescrever o arquivo.
+
 ## [0.8.0] — 2026-08-07
 
 ### Adicionado

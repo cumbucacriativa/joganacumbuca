@@ -348,21 +348,23 @@ body {
 }
 
 .delete-badge {
+  /* escondido até confirmar a senha de admin (ver JS) — só quem passou pelo "+" chega aqui */
+  display: none;
   position: absolute;
-  bottom: 6.5cqw;
-  right: 7cqw;
-  width: 9cqw;
+  bottom: 2cqw;
+  right: 5cqw;
+  width: 7cqw;
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--dark);
   border: 1px solid rgba(249, 255, 252, .3);
-  display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   opacity: .55;
   transition: opacity .15s ease, transform .12s ease;
 }
+.delete-badge.is-visible { display: flex; }
 .delete-badge img { width: 46%; display: block; }
 .delete-badge:active { transform: scale(.9); opacity: 1; }
 
@@ -529,7 +531,8 @@ body {
 
 .dice-overlay__head { display: flex; align-items: center; gap: 3cqw; margin-bottom: 2.5cqw; }
 .dice-overlay__head > img { width: 7cqw; display: block; }
-.dice-overlay__head h2 {
+.dice-overlay__head h2,
+#btn-sortear-tudo {
   flex: 1;
   font-family: 'Libre Franklin', sans-serif;
   font-weight: 700;
@@ -538,6 +541,14 @@ body {
   margin: 0;
   color: var(--rule-dark-card);
 }
+#btn-sortear-tudo {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+#btn-sortear-tudo:active { opacity: .7; }
 .dice-overlay__close {
   width: 5.24cqw;
   aspect-ratio: 1;
@@ -561,6 +572,7 @@ body {
 }
 .dice-overlay__cols { display: grid; grid-template-columns: 1fr 1fr; gap: 4cqw 6cqw; }
 .dice-overlay__col { text-align: left; min-width: 0; }
+.dice-overlay__col--larga { grid-column: 1 / -1; }
 .dice-overlay__col > span {
   display: block;
   font-family: 'Libre Franklin', sans-serif;
