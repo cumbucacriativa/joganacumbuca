@@ -2,6 +2,36 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
+## [0.10.0] — 2026-08-08
+
+### Corrigido
+- **Ícone de excluir não recebia clique nenhum** — `.card-inner` é `position:absolute; inset:0`
+  (cobre a carta inteira) e vem depois do botão no HTML; como nenhum dos dois tinha `z-index`,
+  quem ficava por cima na ordem de pintura era o `.card-inner`, que engolia todo toque na área
+  do ícone. O botão existia e o handler estava certo — só era inalcançável. Resolvido com
+  `z-index: 5` no `.delete-badge`.
+- **Ícone de excluir apagado e pequeno demais** — saiu de 7cqw (~24px, abaixo do mínimo
+  confortável de toque) e `opacity:.55` para 11cqw (~38px) e opacidade cheia. Reposicionado na
+  faixa de padding à direita, alinhado verticalmente com a fileira de botões: não encosta no
+  "+ OPÇÕES", então não rouba o toque dele.
+- **Formulário de cadastro não abria na primeira senha** — o clique no "+" era sempre cancelado
+  e a aba vinha de `window.open(url, '_blank', 'noopener')`; com string de features o navegador
+  trata a chamada como pop-up e bloqueia. Por isso só funcionava "da segunda vez", depois que o
+  usuário liberava pop-ups pro site. Agora, com a senha já validada na sessão, o clique segue o
+  fluxo nativo do link (`href` + `target=_blank`), que não passa pelo bloqueador. A URL do
+  formulário passou a viver só no `href` do `#add-badge` (fonte única).
+
+### Adicionado
+- **Badge de aquecimento** (chama, à esquerda da busca, em todas as telas) — sorteia direto
+  entre os jogos marcados como `aquecimento=sim` e **prende o contexto neles**: o shuffle
+  continua só em aquecimento e o "+ OPÇÕES" cai na lista já filtrada por aquecimento.
+- **"Aquecimento" como categoria na lista** — pseudo-categoria derivada da flag
+  `aquecimento=sim` (não existe na coluna `categoria` do CSV). Aparece no select da lista e no
+  carrossel de categorias, e só entra se houver pelo menos um jogo marcado.
+- **`state.contexto`** — passa a ser a fonte do recorte atual (categoria real, "Todas" ou
+  "Aquecimento") em vez de derivar da categoria do jogo sorteado. É o que faz o shuffle e o
+  "+ OPÇÕES" respeitarem de onde a carta veio.
+
 ## [0.9.0] — 2026-08-07
 
 ### Corrigido

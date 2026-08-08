@@ -105,6 +105,30 @@ body {
 .search-badge:active { transform: scale(.9); }
 .search-badge.is-open { opacity: 0; pointer-events: none; }
 
+/* ============ Badge de aquecimento (à esquerda da busca) ============ */
+/* Sorteia direto entre os jogos marcados como aquecimento e trava o contexto neles:
+   o shuffle continua só em aquecimento e o "+ OPÇÕES" cai na lista já filtrada. */
+
+.warmup-badge {
+  position: absolute;
+  top: 2.5cqw;
+  /* encosta na busca: 3cqw (margem dela) + 10.5cqw (largura dela) + 2cqw de respiro */
+  right: 15.5cqw;
+  width: 10.5cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--dark);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 40;
+  transition: opacity .2s ease, transform .12s ease;
+}
+.warmup-badge img { width: 52%; display: block; }
+.warmup-badge:active { transform: scale(.9); }
+
 /* ============ Badge "+" (canto superior esquerdo) — abre o formulário n8n de cadastro ============ */
 /* Também sem referência no XD — mesmo estilo do badge de busca, espelhado pro outro lado. */
 
@@ -351,9 +375,14 @@ body {
   /* escondido até confirmar a senha de admin (ver JS) — só quem passou pelo "+" chega aqui */
   display: none;
   position: absolute;
-  bottom: 2cqw;
-  right: 5cqw;
-  width: 7cqw;
+  /* .card-inner é absolute inset:0 e vem depois no DOM: sem z-index ele cobre a carta
+     inteira e engolia todo clique daqui (o botão existia mas não dava pra apertar). */
+  z-index: 5;
+  /* na faixa de padding à direita da carta, na mesma linha dos botões — não encosta
+     no "+ OPÇÕES", então não rouba o toque dele */
+  bottom: 6.9cqw;
+  right: 1.5cqw;
+  width: 11cqw;
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--dark);
@@ -361,12 +390,11 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  opacity: .55;
   transition: opacity .15s ease, transform .12s ease;
 }
 .delete-badge.is-visible { display: flex; }
 .delete-badge img { width: 46%; display: block; }
-.delete-badge:active { transform: scale(.9); opacity: 1; }
+.delete-badge:active { transform: scale(.9); opacity: .8; }
 
 .game-card-body {
   display: flex;

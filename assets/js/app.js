@@ -1,6 +1,8 @@
 'use strict';
 
 const TODAS = 'Todas as Categorias';
+// pseudo-categoria: não existe na coluna "categoria" do CSV, é derivada da flag aquecimento=sim
+const AQUECIMENTO = 'Aquecimento';
 
 /* ---------- CSV (suporta campos entre aspas com vírgula) ---------- */
 
@@ -46,11 +48,24 @@ const state = {
   catIndex: 0,
   jogoAtual: null,
   filtroLista: TODAS,
+  // de onde saiu a carta atual (categoria real, "Todas" ou "Aquecimento"). É o que manda
+  // no shuffle e no "+ OPÇÕES" — assim, entrou em aquecimento, continua em aquecimento.
+  contexto: TODAS,
 };
 
 // ordem alfabética só na exibição — o CSV continua na ordem em que as linhas foram cadastradas
 const ordenarPorNome = (lista) => lista.slice().sort((a, b) => a.jogo.localeCompare(b.jogo, 'pt-BR', { sensitivity: 'base' }));
-const jogosDe = (cat) => ordenarPorNome(!cat || cat === TODAS ? state.jogos : state.jogos.filter((j) => j.categoria === cat));
+const jogosDe = (cat) => ordenarPorNome(
+  !cat || cat === TODAS ? state.jogos
+  : cat === AQUECIMENTO ? state.jogos.filter((j) => j.aquecimento === 'sim')
+  : state.jogos.filter((j) => j.categoria === cat));
+
+// "Aquecimento" só entra na lista se existir pelo menos um jogo marcado assim
+function recalcularCategorias() {
+  const reais = [...new Set(state.jogos.map((j) => j.categoria).filter(Boolean))];
+  const temAquecimento = state.jogos.some((j) => j.aquecimento === 'sim');
+  state.categorias = [TODAS, ...(temAquecimento ? [AQUECIMENTO] : []), ...reais];
+}
 
 /* ---------- Sacola: sorteia sem repetir até esgotar todas as opções ---------- */
 /* Em vez de Math.random puro (que pode repetir a mesma coisa várias vezes seguidas
@@ -204,7 +219,10 @@ function renderJogo(jogo) {
 
 function sortearJogo(cat) {
   const jogo = tirarJogo(cat);
-  if (jogo) renderJogo(jogo);
+  if (jogo) {
+    state.contexto = cat || TODAS;
+    renderJogo(jogo);
+  }
   return !!jogo;
 }
 
@@ -227,14 +245,18 @@ function renderLista() {
   listEl.innerHTML = jogosDe(state.filtroLista).map(linhaDeJogo).join('');
 }
 
-function abrirJogoDaLinha(li) {
+function abrirJogoDaLinha(li, contexto) {
   const jogo = state.jogos.find((j) => j.id === li.dataset.id);
-  if (jogo) { renderJogo(jogo); goTo('screen-jogo'); }
+  if (!jogo) return;
+  // veio de uma lista filtrada: o shuffle depois continua dentro daquele mesmo recorte
+  state.contexto = contexto || jogo.categoria || TODAS;
+  renderJogo(jogo);
+  goTo('screen-jogo');
 }
 
 listEl.addEventListener('click', (e) => {
   const li = e.target.closest('li');
-  if (li) abrirJogoDaLinha(li);
+  if (li) abrirJogoDaLinha(li, state.filtroLista);
 });
 
 selectEl.addEventListener('change', () => {
@@ -289,7 +311,8 @@ searchInputEl.addEventListener('input', renderBusca);
 searchResultsEl.addEventListener('click', (e) => {
   const li = e.target.closest('li[data-id]');
   if (!li) return;
-  abrirJogoDaLinha(li);
+  // busca não é um recorte navegável: o contexto passa a ser a categoria do jogo aberto
+  abrirJogoDaLinha(li, null);
   fecharBusca();
 });
 
@@ -358,15 +381,20 @@ document.getElementById('cat-up').addEventListener('click', () => stepCategoria(
 document.getElementById('cat-down').addEventListener('click', () => stepCategoria(1));
 
 document.getElementById('btn-resortear').addEventListener('click', () => {
-  sortearJogo(state.jogoAtual ? state.jogoAtual.categoria : state.categorias[state.catIndex]);
+  sortearJogo(state.contexto);
 });
 
-// "+ OPÇÕES" volta para a lista de jogos
+// "+ OPÇÕES" volta para a lista de jogos, já no mesmo recorte da carta atual
 document.getElementById('btn-opcoes').addEventListener('click', () => {
-  state.filtroLista = state.jogoAtual ? state.jogoAtual.categoria : TODAS;
+  state.filtroLista = state.contexto || TODAS;
   selectEl.value = state.filtroLista;
   renderLista();
   goTo('screen-lista');
+});
+
+// Badge de aquecimento: sorteia entre os jogos de aquecimento e prende o contexto neles
+document.getElementById('warmup-badge').addEventListener('click', () => {
+  if (sortearJogo(AQUECIMENTO)) goTo('screen-jogo');
 });
 
 document.getElementById('btn-aleatorio').addEventListener('click', () => {
@@ -382,7 +410,7 @@ document.getElementById('btn-fechar-lista').addEventListener('click', () => goTo
    no GitHub, então mesmo pulando essa tela ninguém escreve no jogos.csv sem a senha certa. */
 
 const ADMIN_SENHA = '!admin123';
-const ADD_FORM_URL = 'https://lava-automations-n8n.tgervl.easypanel.host/form/9b2cd1a6-7863-44ce-a7cf-7817164b12ed';
+// a URL do formulário fica no href do próprio #add-badge (fonte única, ver index.html)
 const DELETE_WEBHOOK_URL = 'https://lava-automations-n8n.tgervl.easypanel.host/webhook/4bd6eeb9-f48a-4bc7-891a-77d002b1e2f9/joga-na-cumbuca-excluir';
 
 const admOk = () => sessionStorage.getItem('jncAdmin') === '1';
@@ -425,9 +453,16 @@ document.getElementById('admin-form').addEventListener('submit', (e) => {
   }
 });
 
-document.getElementById('add-badge').addEventListener('click', (e) => {
+/* O "+" é um link de verdade (href + target=_blank). Quando já tem senha na sessão, deixamos
+   o próprio link abrir a aba: navegação nativa não é tratada como pop-up. Antes o clique era
+   sempre cancelado e a aba vinha de window.open(...,'noopener'), que o navegador classifica
+   como pop-up e bloqueia — por isso a primeira abertura falhava e só passava a funcionar
+   depois que o usuário liberava pop-ups pro site. */
+const addBadgeEl = document.getElementById('add-badge');
+addBadgeEl.addEventListener('click', (e) => {
+  if (admOk()) return; // segue o fluxo nativo do link
   e.preventDefault();
-  pedirSenha(() => window.open(ADD_FORM_URL, '_blank', 'noopener'));
+  pedirSenha(() => addBadgeEl.click()); // já autorizado: reentra e cai no caminho nativo
 });
 
 const confirmOverlayEl = document.getElementById('confirm-overlay');
@@ -471,7 +506,8 @@ async function excluirJogoAtual() {
     const data = await res.json().catch(() => ({}));
     if (res.ok && data.ok) {
       state.jogos = state.jogos.filter((j) => j.id !== jogo.id);
-      state.categorias = [TODAS, ...new Set(state.jogos.map((j) => j.categoria).filter(Boolean))];
+      recalcularCategorias();
+      if (state.catIndex >= state.categorias.length) state.catIndex = 0;
       selectEl.innerHTML = state.categorias.map((c) => `<option value="${c}">${c}</option>`).join('');
       sacolasDeJogos.clear();
       renderLista();
@@ -582,7 +618,7 @@ async function boot() {
 
   // "visivel=não" é exclusão lógica (feita pelo formulário de admin) — nunca aparece no app
   state.jogos = jogos.filter((j) => j.visivel !== 'não');
-  state.categorias = [TODAS, ...new Set(state.jogos.map((j) => j.categoria).filter(Boolean))];
+  recalcularCategorias();
   state.personagens = aleatorio.map((r) => r.Personagem).filter(Boolean);
   state.locais = aleatorio.map((r) => r.Localizacao).filter(Boolean);
   state.filmes = aleatorio.map((r) => r['Filme / Livro']).filter(Boolean);

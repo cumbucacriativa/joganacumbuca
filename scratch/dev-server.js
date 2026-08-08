@@ -11,8 +11,9 @@ const types = {
 };
 
 http.createServer((req, res) => {
-  let filePath = path.join(root, decodeURIComponent(req.url.split('?')[0]));
-  if (filePath.endsWith('/')) filePath += 'index.html';
+  // checa a URL, não o caminho: no Windows o path.join normaliza pra "\" e o "/" some
+  const urlPath = decodeURIComponent(req.url.split('?')[0]);
+  const filePath = path.join(root, urlPath.endsWith('/') ? urlPath + 'index.html' : urlPath);
   fs.readFile(filePath, (err, data) => {
     if (err) { res.writeHead(404); res.end('Not found'); return; }
     res.writeHead(200, { 'Content-Type': types[path.extname(filePath)] || 'application/octet-stream' });
