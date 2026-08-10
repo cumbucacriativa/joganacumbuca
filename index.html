@@ -6,8 +6,16 @@
 <title>Joga na Cumbuca</title>
 <meta name="description" content="Cartas aleatórias para jogos de improviso.">
 <meta name="theme-color" content="#23302D">
+<meta name="google-adsense-account" content="ca-pub-8381962732355093">
 <link rel="icon" type="image/svg+xml" href="assets/img/dado.svg">
+<!-- atalho na tela de início: manifest cobre Android, apple-touch-icon cobre iOS -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cumbuca">
 <link rel="stylesheet" href="assets/css/style.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8381962732355093" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="app">
@@ -29,6 +37,15 @@
      href="https://lava-automations-n8n.tgervl.easypanel.host/form/9b2cd1a6-7863-44ce-a7cf-7817164b12ed"
      target="_blank" rel="noopener" aria-label="Cadastrar jogo novo">
     <img src="assets/img/mais.svg" alt="">
+  </a>
+
+  <button class="install-badge" id="install-badge" aria-label="Criar atalho na tela de início">
+    <img src="assets/img/casa-mais.svg" alt="">
+  </button>
+
+  <a class="insta-badge" id="insta-badge" href="https://www.instagram.com/cumbucacriativa_/"
+     target="_blank" rel="noopener" aria-label="Instagram da Cumbuca Criativa">
+    <img src="assets/img/instagram.svg" alt="">
   </a>
 
   <div class="screens" id="screens">
@@ -168,6 +185,18 @@
       <p class="admin-overlay__erro is-hidden" id="admin-erro">Senha incorreta. Tenta de novo.</p>
       <button type="submit" class="btn btn--accent btn--w106">ENTRAR</button>
     </form>
+  </div>
+
+  <div class="admin-overlay" id="install-overlay">
+    <div class="admin-overlay__panel">
+      <div class="dice-overlay__head">
+        <img src="assets/img/casa-mais.svg" alt="">
+        <h2>Atalho na tela de início</h2>
+        <button type="button" class="dice-overlay__close" id="install-overlay-close" aria-label="Fechar">X</button>
+      </div>
+      <p class="install-overlay__passos" id="install-passos"></p>
+      <button type="button" class="btn btn--accent btn--w106" id="install-ok">ENTENDI</button>
+    </div>
   </div>
 
   <div class="confirm-overlay" id="confirm-overlay">

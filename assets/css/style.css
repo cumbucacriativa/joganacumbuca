@@ -151,6 +151,62 @@ body {
 .add-badge img { width: 48%; display: block; }
 .add-badge:active { transform: scale(.9); }
 
+/* ============ Badge "casa +" — atalho na tela de início do celular ============ */
+/* Fica escondido quando o app já está rodando em modo standalone (ou seja, já foi
+   instalado) — nesse caso o atalho não faz sentido. Ver JS. */
+
+.install-badge {
+  position: absolute;
+  top: 2.5cqw;
+  /* encosta no "+": 3cqw (margem dele) + 10.5cqw (largura dele) + 2cqw de respiro */
+  left: 15.5cqw;
+  width: 10.5cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--dark);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 40;
+  transition: transform .12s ease;
+}
+.install-badge img { width: 52%; display: block; }
+.install-badge:active { transform: scale(.9); }
+.install-badge.is-hidden { display: none; }
+
+/* ============ Badge do Instagram (canto inferior esquerdo) ============ */
+/* Acima do carrossel do rodapé (z-index 5), senão as cartinhas passariam por cima
+   e comeriam o toque. */
+
+.insta-badge {
+  position: absolute;
+  left: 3cqw;
+  bottom: 3cqw;
+  width: 10.5cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 40;
+  transition: transform .12s ease;
+  text-decoration: none;
+}
+.insta-badge img { width: 54%; display: block; }
+.insta-badge:active { transform: scale(.9); }
+
+.install-overlay__passos {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0 0 14px;
+  white-space: pre-line;
+}
+
 /* ============ Carrossel de cartas do rodapé ============ */
 
 .footer-carousel {

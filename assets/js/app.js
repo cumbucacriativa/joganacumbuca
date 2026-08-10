@@ -411,7 +411,7 @@ document.getElementById('btn-fechar-lista').addEventListener('click', () => goTo
 
 const ADMIN_SENHA = '!admin123';
 // a URL do formulário fica no href do próprio #add-badge (fonte única, ver index.html)
-const DELETE_WEBHOOK_URL = 'https://lava-automations-n8n.tgervl.easypanel.host/webhook/4bd6eeb9-f48a-4bc7-891a-77d002b1e2f9/joga-na-cumbuca-excluir';
+const DELETE_WEBHOOK_URL = 'https://lava-automations-n8n.tgervl.easypanel.host/webhook/9365f4bc-c47c-41f8-b567-5f5ae2f06215/joga-na-cumbuca-excluir';
 
 const admOk = () => sessionStorage.getItem('jncAdmin') === '1';
 function admMarcarOk() {
@@ -425,9 +425,10 @@ const adminInputEl = document.getElementById('admin-input');
 const adminErroEl = document.getElementById('admin-erro');
 let adminCallback = null;
 
+// sem callback, a senha só destrava a sessão de admin (é o caso do "+")
 function pedirSenha(aoConfirmar) {
-  if (admOk()) { aoConfirmar(); return; }
-  adminCallback = aoConfirmar;
+  if (admOk()) { if (aoConfirmar) aoConfirmar(); return; }
+  adminCallback = aoConfirmar || null;
   adminErroEl.classList.add('is-hidden');
   adminInputEl.value = '';
   adminOverlayEl.classList.add('is-open');
@@ -453,16 +454,16 @@ document.getElementById('admin-form').addEventListener('submit', (e) => {
   }
 });
 
-/* O "+" é um link de verdade (href + target=_blank). Quando já tem senha na sessão, deixamos
-   o próprio link abrir a aba: navegação nativa não é tratada como pop-up. Antes o clique era
-   sempre cancelado e a aba vinha de window.open(...,'noopener'), que o navegador classifica
-   como pop-up e bloqueia — por isso a primeira abertura falhava e só passava a funcionar
-   depois que o usuário liberava pop-ups pro site. */
+/* O "+" é um link de verdade (href + target=_blank). O primeiro clique só serve pra destravar
+   a sessão de admin: pede a senha e para por aí, sem abrir o formulário — quem clicou ali
+   normalmente só quer liberar a lixeira. Do clique seguinte em diante, com a senha já na
+   sessão, o próprio link abre o formulário (navegação nativa, que não é tratada como pop-up
+   pelo navegador — window.open com 'noopener' era e por isso vinha bloqueada). */
 const addBadgeEl = document.getElementById('add-badge');
 addBadgeEl.addEventListener('click', (e) => {
-  if (admOk()) return; // segue o fluxo nativo do link
+  if (admOk()) return; // segue o fluxo nativo do link e abre o formulário
   e.preventDefault();
-  pedirSenha(() => addBadgeEl.click()); // já autorizado: reentra e cai no caminho nativo
+  pedirSenha(); // só destrava; o formulário fica pro próximo clique
 });
 
 const confirmOverlayEl = document.getElementById('confirm-overlay');
@@ -521,6 +522,64 @@ async function excluirJogoAtual() {
     btnExcluirEl.disabled = false;
   }
 }
+
+/* ---------- Atalho na tela de início ---------- */
+/* Só o Chrome (Android/desktop) deixa abrir o instalador por código, e mesmo assim só quando
+   ele resolve disparar o beforeinstallprompt. No iOS não existe API nenhuma: o caminho é o
+   usuário ir no menu de compartilhar. Por isso o botão tem dois modos: se o navegador nos deu
+   o prompt, usa ele; senão, explica o passo a passo daquele aparelho. */
+
+const installBadgeEl = document.getElementById('install-badge');
+const installOverlayEl = document.getElementById('install-overlay');
+const installPassosEl = document.getElementById('install-passos');
+let promptInstalar = null;
+
+const ehIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const ehAndroid = () => /android/i.test(navigator.userAgent);
+const jaInstalado = () => window.matchMedia('(display-mode: standalone)').matches ||
+  navigator.standalone === true;
+
+function passosDoAparelho() {
+  if (ehIOS()) {
+    return 'No Safari, toque no botão de compartilhar (o quadradinho com a seta pra cima), ' +
+           'desça a lista e escolha "Adicionar à Tela de Início".';
+  }
+  if (ehAndroid()) {
+    return 'No Chrome, toque nos três pontinhos do canto e escolha "Instalar app" ou ' +
+           '"Adicionar à tela inicial".';
+  }
+  return 'No menu do navegador, procure por "Instalar" ou "Adicionar à tela inicial".';
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); // segura o banner do navegador; quem abre é o nosso botão
+  promptInstalar = e;
+});
+
+window.addEventListener('appinstalled', () => {
+  promptInstalar = null;
+  installBadgeEl.classList.add('is-hidden');
+});
+
+installBadgeEl.addEventListener('click', async () => {
+  if (promptInstalar) {
+    promptInstalar.prompt();
+    const { outcome } = await promptInstalar.userChoice;
+    promptInstalar = null; // só pode ser usado uma vez
+    if (outcome === 'accepted') installBadgeEl.classList.add('is-hidden');
+    return;
+  }
+  installPassosEl.textContent = passosDoAparelho();
+  installOverlayEl.classList.add('is-open');
+});
+
+const fecharInstall = () => installOverlayEl.classList.remove('is-open');
+document.getElementById('install-overlay-close').addEventListener('click', fecharInstall);
+document.getElementById('install-ok').addEventListener('click', fecharInstall);
+
+// quem já abriu pelo atalho não precisa do botão
+if (jaInstalado()) installBadgeEl.classList.add('is-hidden');
 
 /* ---------- Rodapé: carrossel infinito (metade duplicada p/ loop sem emenda) ---------- */
 /* Cada cartinha é clicável: "voa" até o centro, gira, e abre um jogo aleatório

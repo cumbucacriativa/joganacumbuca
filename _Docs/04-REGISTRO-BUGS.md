@@ -59,32 +59,79 @@ nesta sessão estava plugado na `vps-adn` (ADN Construtora) por engano. O client
 conector certo (`vps-lava`) na sequência e o workflow foi criado normalmente — ver
 `n8n/vps-lava/clientes/lava-agencia/README.md` e `changelog.md`.
 
-### Workflow n8n de cadastro/exclusão criado, mas ainda inativo
+### ~~Workflow n8n de cadastro/exclusão criado, mas ainda inativo~~ — resolvido (credencial GitHub configurada)
 
-**Sintoma:** o workflow `[KEWIN] Joga na Cumbuca - Cadastro de Jogos` (ID `fGqJEeLlgj2MhpJx`)
-foi criado com sucesso via MCP, incluindo os 4 nós GitHub necessários. Mas a ferramenta MCP não
-consegue **criar credenciais** (só referenciá-las por `newCredential(...)`, que gera um
-placeholder) — então os nós GitHub ficaram sem credencial de verdade atribuída, e o workflow
-não foi ativado (evitar deixar uma automação quebrada "no ar").
+Workflow ativo, credencial `Github Cumbuca` (id `l5SuoiPmX7o8HqrS`) atribuída aos 4 nós GitHub.
+Fluxo de cadastro (formulário) testado e funcionando em produção. Ver bug abaixo sobre o
+webhook de exclusão especificamente.
 
-**Bloqueia:** os botões "+" (cadastrar) e lixeira (excluir) no app abrem/chamam os endpoints
-certos, mas a gravação no GitHub falha até isso ser resolvido.
+### Webhook de exclusão de jogo não registra no n8n quando o workflow tem um node GitHub (self-hosted, `vps-lava`)
 
-**Como resolver** (2 passos manuais no n8n, ~2 minutos):
-1. No n8n (`vps-lava`), abrir o workflow e ir em Credentials > New > **GitHub API**. Colar o
-   token de `_docs/github-cumbuca-criativa.md` (na raiz do `_Dev`). Nomear a credencial
-   `GitHub - Cumbuca Criativa` (mesmo nome que os nós já esperam).
-2. Selecionar essa credencial nos 4 nós GitHub do fluxo ("Buscar jogos.csv Atual", "Salvar
-   jogos.csv no GitHub", "Buscar jogos.csv para Excluir", "Salvar Exclusao no GitHub"), e
-   ativar o workflow (toggle no canto superior direito do editor).
+**Sintoma (2026-08-10):** clicar na lixeira no app não excluía o jogo. Investigado ponta a
+ponta, incluindo depois que o cliente já tinha tentado reativar o workflow pela UI do n8n (que
+nessa versão não tem mais toggle simples de ativo — só publish/versão) e reiniciado o container
+no EasyPanel, sem resultado.
 
-Depois disso, testar uma vez cada fluxo (cadastrar um jogo de teste, depois excluir ele) antes
-de considerar resolvido.
+**Causa raiz confirmada por eliminação:** criei 3 workflows de diagnóstico temporários (já
+arquivados) pra isolar a variável:
+1. Webhook trigger sozinho + Respond → **funcionou** (200 OK).
+2. Webhook trigger + node IF + Respond → **funcionou** (200 OK).
+3. Webhook trigger + node **GitHub** (`n8n-nodes-base.github`, com credencial `Github Cumbuca`)
+   + Respond → **não registrou** (404 "webhook not registered"), mesmo publicando várias vezes,
+   com credencial anexada de formas diferentes (`newCredential()` na criação, `setNodeCredential`
+   depois, node recriado do zero com `credentials` embutido no `addNode`).
+
+Ou seja: **qualquer workflow que tenha um trigger `n8n-nodes-base.webhook` E um node
+`n8n-nodes-base.github` no mesmo grafo tem o registro do webhook de produção quebrado nesta
+instância do n8n** — não é sobre CORS, path, `webhookId`, `responseMode`, nem sobre ter dois
+triggers no mesmo workflow (testado e descartado). O form trigger do cadastro funciona porque,
+apesar de também ter nodes GitHub, o mecanismo de registro de formulário é diferente do de
+webhook — não passa pelo mesmo caminho quebrado.
+
+Isso bate com uma classe conhecida de bugs do n8n 2.x onde a ativação via API (ou até a própria
+"Publish" da UI nova) não recarrega a tabela de rotas de webhook em produção — mas o detalhe
+específico de travar só quando tem node GitHub no meio não é coberto pelos relatos públicos que
+achei; pode ser algo nessa instância (ex: o node GitHub faz uma checagem de credencial
+síncrona/de rede durante a ativação que trava o registro do webhook se falhar ou demorar).
+
+**Não resolve:** desativar/reativar via API nem via UI, reiniciar o container, trocar `path`,
+recriar o node do webhook do zero, trocar `responseMode`, separar num workflow próprio (fiz
+isso — `[KEWIN] Joga na Cumbuca - Excluir Jogo`, id `qO9V0UitpSsFPTC2` — mesmo isolado, com só
+o node GitHub, continua sem registrar).
+
+**Client já atualizado:** `assets/js/app.js` aponta pra URL do workflow novo e isolado
+(`.../webhook/9365f4bc-c47c-41f8-b567-5f5ae2f06215/joga-na-cumbuca-excluir`) — é a URL certa
+assim que o registro colar.
+
+**Caminho de solução mais provável:** trocar o node GitHub (`n8n-nodes-base.github`) por um
+node **HTTP Request** genérico chamando a API REST do GitHub direto
+(`GET/PUT https://api.github.com/repos/cumbucacriativa/joganacumbuca/contents/data/jogos.csv`)
+com uma credencial **HTTP Header Auth** (`Authorization: Bearer <token>`) em vez da credencial
+GitHub dedicada — isso contorna o que quer que o node GitHub esteja disparando na hora da
+ativação. Não consegui fazer isso via MCP porque criar uma credencial nova exige colar o token
+na UI do n8n (não tem ferramenta MCP pra isso, e não é algo que devo fazer por fora da UI).
+
+**Como resolver (precisa de alguém com acesso à UI do n8n):**
+1. No n8n (`vps-lava`), criar uma credencial **HTTP Header Auth** com header
+   `Authorization: Bearer <token do _docs/github-cumbuca-criativa.md>`.
+2. No workflow `[KEWIN] Joga na Cumbuca - Excluir Jogo` (`qO9V0UitpSsFPTC2`), trocar os 2 nodes
+   GitHub ("Buscar jogos.csv para Excluir" e "Salvar Exclusao no GitHub") por nodes HTTP Request
+   equivalentes usando essa credencial (fico à disposição pra montar os nodes via MCP assim que
+   a credencial existir — só preciso do nome dela).
+3. Publicar e testar com
+   `curl -X POST '.../webhook/9365f4bc-c47c-41f8-b567-5f5ae2f06215/joga-na-cumbuca-excluir' -H 'Content-Type: application/json' -d '{"id":"999999999","senha":"!admin123"}'`
+   — deve responder `{"ok":false,...}` (JSON), não mais 404/500. Depois testar excluindo um jogo
+   de teste de verdade pelo app.
+
+Alternativa mais simples, se não quiser mexer em credenciais agora: reportar o bug pro suporte/
+comunidade do n8n (padrão bate com issues públicas tipo n8n-io/n8n#34038, #23549, #21614,
+#23808 sobre webhook não registrar depois de ativação em v2.x) e aguardar correção, já que
+reiniciar/reativar não resolve nesta instância.
 
 ## Pendências (roadmap curto)
 
-- Ativar o workflow n8n (credencial + toggle) — ver acima. Bloqueia cadastro/exclusão de jogo
-  funcionarem de ponta a ponta.
+- Resolver o registro do webhook de exclusão no n8n (trocar node GitHub por HTTP Request, ver
+  acima) — bloqueia só a exclusão (o cadastro já funciona).
 - Colunas mediador/aquecimento/música como filtro ativo (hoje só informativo) — aguardando
   confirmação em `02-ESCOPO.md`.
 - PWA/instalável — aguardando confirmação em `02-ESCOPO.md`.
