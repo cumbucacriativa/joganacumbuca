@@ -20,13 +20,15 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
   - ID 64 (*História em Três Tempos*): Renomeado para *Passado, presente, futuro* com dinâmica de 3 pedaços de palco para a linha temporal.
   - ID 66 (*O Mistério do Objeto*): Renomeado para *Objeto Imaginado*.
   - ID 69 (*Pausa para Comercial*): Atores da cena principal agora congelam durante o comercial em vez de saírem de cena.
-  - ID 25 (*Mímica Total*): Adicionada orientação para o público definir o tema da cena.
+  - ID 25 (*Mímica Total*): Renomeado para *Mímica*, alterado para a categoria *Grupos* e atualizada a regra com revezamento de adivinhação em 1 minuto entre equipes.
   - ID 54 (*Cena Invertida*): Renomeado para *Cena do Crime*.
   - ID 33 (*A Maçaneta*): Renomeado para *Quem bate à porta?*.
   - ID 50 (*Roteiro de Dublagem*): Removida a menção a microfone na regra.
 
 ### Adicionado
-- **Novo jogo**: *Telefone Sem Fio* (Todos, 3+ participantes) onde cada ator reproduz a cena anterior individualmente fora do palco para comparar distorções no final.
+- **Novos jogos**:
+  - *Telefone Sem Fio* (Todos, 3+ participantes) onde cada ator reproduz a cena anterior individualmente fora do palco para comparar distorções no final.
+  - *Objeto Mímico* (Grupos, 4+ participantes, ID 90) onde a equipe representa coletivamente um objeto com corpo, movimentos e sons para pontuação.
 
 ## [0.10.0] — 2026-08-08
 
