@@ -8,15 +8,22 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 - **Corte de layout no rodapé da carta (Ticket Card)**: Adicionado `max-height: calc(100dvh - 30cqw)` no `.ticket-card` e ajustado o padding vertical de `.screen` (`padding: min(17cqw, 75px) 3.5cqw min(20cqw, 85px)`), garantindo que a carta diminua proporcionalmente e nunca fique cortada em telas curtas ou navegadores responsivos.
 
 ### Alterado
-- **Remoção de 25 jogos por ID**: (70, 1, 37, 60, 57, 59, 81, 45, 80, 84, 76, 79, 62, 73, 85, 38 [recadastrado], 61, 49, 65, 83, 46, 72, 55, 71, 44).
+- **Remoção de 31 jogos por ID**: (70, 1, 37, 60, 57, 59, 81, 45, 80, 84, 76, 79, 62, 73, 85, 38 [recadastrado], 61, 49, 65, 83, 46, 72, 55, 71, 44, 52, 36, 53, 82, 48, 30).
 - **Edição de jogos existentes**:
-  - ID 38 (*Uma verdade duas mentiras*): Atualizado como jogo em Duplas (3 duplas apresentam cenas de 3 fatos, sendo 2 verdades e 1 mentira, para a plateia adivinhar).
+  - ID 13 (*Uma Palavra de Cada Vez*): Renomeado para *Gêmeos Siameses*.
+  - ID 27 (*Estilos de Cinema*): Renomeado para *Estilos*.
+  - ID 32 (*Gira a Roda*): Adicionada regra de retorno da cena na volta do quadrado e conclusão de todas na 3ª girada.
+  - ID 38 (*Uma verdade duas mentiras*): Atualizado como jogo em Duplas (3 duplas apresentam cenas de 3 fatos para a plateia adivinhar).
+  - ID 42 (*Em Pé Sentado e Deitado*): Renomeado para *1 2 3 4* (comandos: 1 em pé, 2 plano médio, 3 deitado, 4 pular, com eliminação).
+  - ID 43 (*Momento do Oscar*): Renomeado para *Momento Oscar*.
+  - ID 56 (*Escola de Personagens*): Renomeado para *Corpo que fala*.
+  - ID 64 (*História em Três Tempos*): Renomeado para *Passado, presente, futuro* com dinâmica de 3 pedaços de palco para a linha temporal.
+  - ID 66 (*O Mistério do Objeto*): Renomeado para *Objeto Imaginado*.
+  - ID 69 (*Pausa para Comercial*): Atores da cena principal agora congelam durante o comercial em vez de saírem de cena.
   - ID 25 (*Mímica Total*): Adicionada orientação para o público definir o tema da cena.
-  - ID 54 (*Cena Invertida*): Renomeado para *Cena do Crime* (Grupos, 4+ participantes, investigador analisa mortes estáticas e narra os fatos).
-  - ID 33 (*A Maçaneta*): Renomeado para *Quem bate à porta?* (Todos, foco no trajeto/arquétipo e reação ao abrir a porta).
+  - ID 54 (*Cena Invertida*): Renomeado para *Cena do Crime*.
+  - ID 33 (*A Maçaneta*): Renomeado para *Quem bate à porta?*.
   - ID 50 (*Roteiro de Dublagem*): Removida a menção a microfone na regra.
-  - ID 42 (*Em Pé Sentado e Deitado*): Transformado em jogo de aquecimento em roda/espaço com eliminação por contagem ímpar de posições.
-  - ID 32 (*Gira a Roda*): Corrigido erro de digitação ("forming" para "formando").
 
 ### Adicionado
 - **Novo jogo**: *Telefone Sem Fio* (Todos, 3+ participantes) onde cada ator reproduz a cena anterior individualmente fora do palco para comparar distorções no final.
