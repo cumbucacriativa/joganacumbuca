@@ -4,9 +4,13 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
 ## [0.11.0] — 2026-08-10
 
+### Corrigido
+- **Corte de layout no rodapé da carta (Ticket Card)**: Adicionado `max-height: calc(100dvh - 30cqw)` no `.ticket-card` e ajustado o padding vertical de `.screen` (`padding: min(17cqw, 75px) 3.5cqw min(20cqw, 85px)`), garantindo que a carta diminua proporcionalmente e nunca fique cortada em telas curtas ou navegadores responsivos.
+
 ### Alterado
-- **Remoção de 24 jogos** por ID (70, 1, 37, 60, 57, 59, 81, 45, 80, 84, 76, 79, 62, 73, 85, 38, 61, 49, 65, 83, 46, 72, 55, 71).
-- **Edição de 6 jogos existentes**:
+- **Remoção de 25 jogos por ID**: (70, 1, 37, 60, 57, 59, 81, 45, 80, 84, 76, 79, 62, 73, 85, 38 [recadastrado], 61, 49, 65, 83, 46, 72, 55, 71, 44).
+- **Edição de jogos existentes**:
+  - ID 38 (*Uma verdade duas mentiras*): Atualizado como jogo em Duplas (3 duplas apresentam cenas de 3 fatos, sendo 2 verdades e 1 mentira, para a plateia adivinhar).
   - ID 25 (*Mímica Total*): Adicionada orientação para o público definir o tema da cena.
   - ID 54 (*Cena Invertida*): Renomeado para *Cena do Crime* (Grupos, 4+ participantes, investigador analisa mortes estáticas e narra os fatos).
   - ID 33 (*A Maçaneta*): Renomeado para *Quem bate à porta?* (Todos, foco no trajeto/arquétipo e reação ao abrir a porta).

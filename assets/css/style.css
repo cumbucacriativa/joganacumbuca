@@ -294,7 +294,7 @@ body {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 19.5cqw 3.5cqw 23cqw;
+  padding: min(17cqw, 75px) 3.5cqw min(20cqw, 85px);
   perspective: 1400px;
   z-index: 10;
   /* a tela inteira (inclusive o padding vazio de baixo) fica por cima do carrossel
@@ -323,6 +323,7 @@ body {
   position: relative;
   width: 100%;
   max-width: 362.5px;
+  max-height: calc(100dvh - 30cqw);
   aspect-ratio: 362.5 / 507.9;
   background-repeat: no-repeat;
   background-size: 100% 100%;
