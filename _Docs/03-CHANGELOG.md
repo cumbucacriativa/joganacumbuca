@@ -2,6 +2,21 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
+## [0.11.0] — 2026-08-10
+
+### Alterado
+- **Remoção de 24 jogos** por ID (70, 1, 37, 60, 57, 59, 81, 45, 80, 84, 76, 79, 62, 73, 85, 38, 61, 49, 65, 83, 46, 72, 55, 71).
+- **Edição de 6 jogos existentes**:
+  - ID 25 (*Mímica Total*): Adicionada orientação para o público definir o tema da cena.
+  - ID 54 (*Cena Invertida*): Renomeado para *Cena do Crime* (Grupos, 4+ participantes, investigador analisa mortes estáticas e narra os fatos).
+  - ID 33 (*A Maçaneta*): Renomeado para *Quem bate à porta?* (Todos, foco no trajeto/arquétipo e reação ao abrir a porta).
+  - ID 50 (*Roteiro de Dublagem*): Removida a menção a microfone na regra.
+  - ID 42 (*Em Pé Sentado e Deitado*): Transformado em jogo de aquecimento em roda/espaço com eliminação por contagem ímpar de posições.
+  - ID 32 (*Gira a Roda*): Corrigido erro de digitação ("forming" para "formando").
+
+### Adicionado
+- **Novo jogo**: *Telefone Sem Fio* (Todos, 3+ participantes) onde cada ator reproduz a cena anterior individualmente fora do palco para comparar distorções no final.
+
 ## [0.10.0] — 2026-08-08
 
 ### Corrigido

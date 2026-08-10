@@ -187,7 +187,7 @@ body {
   width: 10.5cqw;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: var(--dark);
+  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -198,6 +198,22 @@ body {
 }
 .insta-badge img { width: 54%; display: block; }
 .insta-badge:active { transform: scale(.9); }
+
+/* ============ Banner de anúncio (AdSense) ============ */
+/* por cima do carrossel do rodapé, mesma faixa de z-index dos badges — abaixo de
+   qualquer overlay/modal (que começam em z-index 50), então nunca tampa diálogo. */
+.ad-banner {
+  position: absolute;
+  right: 3cqw;
+  bottom: 3cqw;
+  width: 42cqw;
+  max-width: 180px;
+  min-height: 11cqw;
+  z-index: 40;
+  overflow: hidden;
+  border-radius: 2.5cqw;
+}
+.ad-banner .adsbygoogle { width: 100%; }
 
 .install-overlay__passos {
   font-family: 'Roboto', sans-serif;
