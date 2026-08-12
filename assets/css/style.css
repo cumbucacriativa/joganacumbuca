@@ -46,6 +46,10 @@ body {
   .app {
     max-width: none;
     width: min(94vw, 620px, calc(100dvh * 0.53));
+    /* libera o corte pros badges e o carrossel poderem sair da coluna (ver bloco abaixo).
+       O que sobra do rodapé continua cortado, agora pelo overflow:hidden do body — o .app
+       ocupa 100dvh, então a borda de baixo dele é a borda da tela mesmo. */
+    overflow: visible;
   }
 }
 
@@ -882,4 +886,40 @@ body {
   .footer-carousel__track, .dice-badge__dice { animation: none; }
   .screen.is-flip-out .ticket-card,
   .screen.is-flip-in  .ticket-card { animation-duration: .01ms; }
+}
+
+/* ============ PC / tablet deitado: badges e rodapé nos cantos da tela ============ */
+/* Precisa ficar no FIM do arquivo: media query não aumenta especificidade, então se este
+   bloco vier antes das regras base de cada badge elas ganham e nada disso pega.
+   A coluna central (.app) segue segurando o baralho — é ela que mantém a proporção de
+   celular da carta —, mas os badges e o carrossel se ancoram nos cantos da TELA, senão
+   ficam amontoados no meio com o carrossel cortado no vazio dos dois lados.
+   O truque é o calc(-50vw + 50%): "50%" aqui é metade da largura do .app (o containing
+   block), então isso empurra o elemento da borda da coluna até a borda do viewport,
+   preservando exatamente os mesmos respiros em cqw já usados no mobile. */
+@media (min-width: 700px) {
+  .add-badge,
+  .insta-badge   { left: calc(-50vw + 50% + 3cqw); }
+  .install-badge { left: calc(-50vw + 50% + 15.5cqw); }
+  .search-badge  { right: calc(-50vw + 50% + 3cqw); }
+  .warmup-badge  { right: calc(-50vw + 50% + 15.5cqw); }
+
+  /* Os fundos escuros (do dado, da senha de admin e da confirmação) também precisam cobrir
+     a tela inteira — presos na coluna eles escurecem só a "moldurinha" do meio e o resto da
+     tela fica claro, o que denuncia a largura fixa. Os painéis seguem centralizados porque
+     esses overlays são flex centrados. */
+  .dice-backdrop,
+  .admin-overlay,
+  .confirm-overlay,
+  .footer-carousel {
+    left: calc(-50vw + 50%);
+    right: auto;
+    width: 100vw;
+  }
+
+  /* A fita de cartas é bem mais larga que a tela (precisa disso pro loop fechar) e o .app
+     não corta mais nada aqui. Quem segura o excesso é o overflow:hidden do body; este
+     clip-path é só garantia de que nada vaze pelos lados mesmo assim. Corta só nas laterais
+     e deixa o topo livre, senão o pulinho das cartas (footer-hop) sai decepado. */
+  .footer-carousel { clip-path: inset(-100vh 0 0 0); }
 }

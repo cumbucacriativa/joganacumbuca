@@ -594,7 +594,13 @@ const footerTrackEl = document.getElementById('footer-track');
 let footerFlightBusy = false;
 
 function buildFooter() {
-  const half = 10;
+  /* No desktop o carrossel ocupa a largura toda da tela (ver CSS), e o loop sem emenda
+     depende da primeira metade das cartas ser mais larga que a área visível — senão sobra
+     um buraco no meio da volta. Cada carta anda 18.2% da largura do .app (29.8cqw de
+     largura menos 11.6cqw de sobreposição, as duas do .footer-card no CSS); o +2 é folga. */
+  const larguraApp = document.querySelector('.app').getBoundingClientRect().width;
+  const passoDaCarta = larguraApp * 0.182;
+  const half = Math.max(10, Math.ceil(window.innerWidth / passoDaCarta) + 2);
   footerTrackEl.innerHTML = Array.from({ length: half * 2 }, (_, i) => {
     const delay = ((i * 37) % 97) / 10; // atraso pseudo-aleatório por carta, em segundos
     return `<button class="footer-card" type="button" aria-label="Sortear um jogo surpresa" style="--hop-delay:-${delay}s"><img src="assets/img/carta-rodape.svg" alt=""></button>`;
@@ -668,6 +674,14 @@ function abrirCartaSurpresa(cardEl) {
   anim.onfinish = pousar;
   setTimeout(pousar, 900);
 }
+
+/* Redimensionar a janela muda quantas cartas o carrossel precisa pra fechar a volta
+   (ver buildFooter) — refaz o rodapé, com uma folga pra não refazer a cada pixel. */
+let footerResizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(footerResizeTimer);
+  footerResizeTimer = setTimeout(buildFooter, 200);
+});
 
 /* ---------- Boot ---------- */
 
