@@ -23,10 +23,13 @@ arquitetura, escopo ou dados.
   parte do viewport mobile e escala pra cima, nunca o contrário.
 - Mudanças de escopo, arquitetura ou decisões de produto devem atualizar o doc correspondente
   em `_Docs/` e uma entrada em [`_Docs/03-CHANGELOG.md`](_Docs/03-CHANGELOG.md).
-- Projeto vive dentro do Google Drive (`G:\Meu Drive\CLIENTES\_Dev\Joga na Cumbuca`) — mesma
-  pasta que já causou problemas de build por sincronização em outros projetos (ver
+- Projeto vive dentro do Google Drive (`G:\Meu Drive\CLIENTES\_Dev\Cumbuca\Joga na Cumbuca`) —
+  mesma pasta que já causou problemas de build por sincronização em outros projetos (ver
   `_Docs/04-REGISTRO-BUGS.md`). Como aqui não há build step, o risco é baixo, mas vale lembrar
   se algum dia entrar um bundler/npm.
+- Esse projeto vive dentro de `_Dev/Cumbuca/`, junto com a Home/linktree da Cumbuca Criativa
+  (`../Home/`). Qualquer mudança de escopo relevante (nova feature, novo produto) deve
+  considerar se precisa virar um link novo no linktree — ver a regra em `../CLAUDE.md`.
 - **Tom de voz do conteúdo que vai pro app** (descrição de jogos no CSV, textos/copy da
   interface): objetivo, informal, do jeito que se fala no dia a dia. Pode ter piadinha leve
   pra descontrair. Nunca usar travessão (—) nem emoji. Evitar linguagem técnica — é pra quem
