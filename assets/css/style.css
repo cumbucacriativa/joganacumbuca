@@ -873,7 +873,10 @@ body {
   margin: 0 0 16px;
 }
 
-@media (min-width: 431px) { body { background: #101917; } }
+/* Aqui existia um "letterbox" escuro (#101917) no fundo em telas > 431px, de quando o app
+   era travado em 430px e ficava como um cartãozinho no meio do desktop. Com o app
+   responsivo (ver .app no topo do arquivo) a moldura virou faixa larga e feia, então o
+   fundo creme segue contínuo em qualquer tamanho de tela. */
 
 @media (prefers-reduced-motion: reduce) {
   .footer-carousel__track, .dice-badge__dice { animation: none; }
