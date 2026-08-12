@@ -320,6 +320,7 @@ searchResultsEl.addEventListener('click', (e) => {
 
 const badgeEl = document.getElementById('dice-badge');
 const overlayEl = document.getElementById('dice-overlay');
+const diceBackdropEl = document.getElementById('dice-backdrop');
 const btnSortearTudo = document.getElementById('btn-sortear-tudo');
 
 // cada botão do overlay junto com a função que sorteia o valor dele — usado tanto
@@ -349,15 +350,18 @@ function openOverlay() {
   setTimeout(() => {
     badgeEl.classList.add('is-open');
     overlayEl.classList.add('is-open');
+    diceBackdropEl.classList.add('is-open');
   }, 300);
 }
 function closeOverlay() {
   overlayEl.classList.remove('is-open');
+  diceBackdropEl.classList.remove('is-open');
   setTimeout(() => badgeEl.classList.remove('is-open', 'is-rolling'), 300);
 }
 
 badgeEl.addEventListener('click', openOverlay);
 document.getElementById('dice-overlay-close').addEventListener('click', closeOverlay);
+diceBackdropEl.addEventListener('click', closeOverlay);
 btnSortearTudo.addEventListener('click', rolarTudo);
 
 camposDoDado.forEach((campo) => campo.btn.addEventListener('click', () => rolarCampo(campo)));

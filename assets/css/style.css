@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700;800&family=Roboto:wght@400;700&display=swap');
 
 :root {
+  color-scheme: light;
   --bg: #FFF7E1;
   --dark: #23302D;
   --accent: #00FFAA;
@@ -620,6 +621,22 @@ body {
 .game-list__icons img { width: 3.9cqw; display: block; }
 
 /* ============ Overlay "Sortear de novo" ============ */
+
+/* Fundo escuro por trás do painel do dado — cobre o app inteiro, some clicando fora
+   do painel. Elemento separado (não é o .dice-overlay em si) pra não interferir no
+   container-query que o painel usa pra dimensionar o próprio conteúdo em cqw. */
+.dice-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 49;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  transition: background .3s ease;
+}
+.dice-backdrop.is-open {
+  background: rgba(0, 0, 0, .55);
+  pointer-events: auto;
+}
 
 .dice-overlay {
   position: absolute;
