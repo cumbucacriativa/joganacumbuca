@@ -34,6 +34,20 @@ body {
   container-name: app;
 }
 
+/* PC e tablet deitado: o app é um "cartão" desenhado em cqw (unidade relativa à própria
+   largura do .app), então só aumentar o max-width já escala tudo lá dentro proporcionalmente
+   — não precisa mexer em nenhuma regra do mobile. O width vem do min() entre 94% da tela,
+   um teto de 620px (pra não ficar gigante em monitor ultrawide) e a largura equivalente à
+   altura da tela mantendo a proporção de celular (430/812) — isso evita que o cartão fique
+   mais alto que a tela e corte conteúdo embaixo. A media query só liga a partir de telas bem
+   mais largas que qualquer celular, então portrait de celular nunca entra aqui. */
+@media (min-width: 700px) {
+  .app {
+    max-width: none;
+    width: min(94vw, 620px, calc(100dvh * 0.53));
+  }
+}
+
 /* ============ Badge do dado (fixo no topo, todas as telas) ============ */
 
 .dice-badge {
