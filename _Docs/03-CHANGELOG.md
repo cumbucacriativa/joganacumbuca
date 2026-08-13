@@ -2,6 +2,15 @@
 
 Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
+## [0.12.0] — 2026-08-13
+
+### Adicionado
+- **Publicação em Produção WordPress**: App publicado e integrado em `https://cumbucacriativa.gt.tc/joganacumbuca/` via FTP, com a página registrada nativamente no menu **Páginas** do WordPress (`wp-admin/edit.php?post_type=page`).
+- **Roteamento de Templates**: Criado o mu-plugin `cumbuca-pages.php` que carrega os templates de `htdocs/templates/joganacumbuca/index.html`.
+
+### Alterado
+- **Links Relativos Flexíveis**: Atualizados os links do ecossistema Cumbuca para caminhos relativos (`joganacumbuca/` e `pix/`), funcionando perfeitamente em qualquer domínio (WordPress e GitHub Pages).
+
 ## [0.11.0] — 2026-08-10
 
 ### Corrigido
