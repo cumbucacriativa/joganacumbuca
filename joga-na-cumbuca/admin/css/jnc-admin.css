@@ -1,0 +1,447 @@
+/* Zero Visual WP - App Shell Joga na Cumbuca */
+:root {
+  --jnc-bg: #1B2422;
+  --jnc-surface: #23302D;
+  --jnc-surface-hover: #2F3E3B;
+  --jnc-border: #3A4C48;
+  --jnc-text: #FFF7E1;
+  --jnc-text-muted: #A3B5B1;
+  --jnc-accent: #00FFAA;
+  --jnc-accent-hover: #00CC88;
+  --jnc-danger: #FF4D4D;
+  --jnc-radius: 12px;
+  --jnc-font: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body[class*="joga-na-cumbuca"] {
+  background-color: var(--jnc-bg) !important;
+  color: var(--jnc-text);
+  font-family: var(--jnc-font);
+  margin: 0;
+  padding: 0;
+}
+
+/* Ocultar elementos nativos do WP */
+body[class*="joga-na-cumbuca"] #wpcontent {
+  padding-left: 0 !important;
+}
+body[class*="joga-na-cumbuca"] #wpbody-content {
+  padding-bottom: 0 !important;
+}
+body[class*="joga-na-cumbuca"] #wpfooter,
+body[class*="joga-na-cumbuca"] .notice,
+body[class*="joga-na-cumbuca"] #screen-meta-links {
+  display: none !important;
+}
+
+.jnc-app {
+  min-height: calc(100vh - 32px);
+  background-color: var(--jnc-bg);
+  color: var(--jnc-text);
+  box-sizing: border-box;
+}
+
+/* Topbar */
+.jnc-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--jnc-surface);
+  border-bottom: 1px solid var(--jnc-border);
+  padding: 0 24px;
+  height: 64px;
+  position: sticky;
+  top: 32px;
+  z-index: 100;
+}
+.jnc-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.jnc-topbar__logo {
+  font-size: 24px;
+}
+.jnc-topbar__title {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--jnc-text);
+}
+.jnc-topbar__badge {
+  background-color: rgba(0, 255, 170, 0.15);
+  color: var(--jnc-accent);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 170, 0.3);
+}
+
+.jnc-nav {
+  display: flex;
+  gap: 8px;
+}
+.jnc-nav__item {
+  color: var(--jnc-text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.jnc-nav__item:hover {
+  color: var(--jnc-text);
+  background-color: var(--jnc-surface-hover);
+}
+.jnc-nav__item.is-active {
+  color: #1B2422;
+  background-color: var(--jnc-accent);
+}
+
+/* Conteudo Principal */
+.jnc-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+.jnc-view__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.jnc-view__title {
+  margin: 0 0 6px 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--jnc-text);
+}
+.jnc-view__sub {
+  margin: 0;
+  color: var(--jnc-text-muted);
+  font-size: 14px;
+}
+
+/* Botoes */
+.jnc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--jnc-font);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: var(--jnc-radius);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.jnc-btn--primary {
+  background-color: var(--jnc-accent);
+  color: #1B2422;
+}
+.jnc-btn--primary:hover {
+  background-color: var(--jnc-accent-hover);
+  box-shadow: 0 0 12px rgba(0, 255, 170, 0.4);
+}
+.jnc-btn--secondary {
+  background-color: var(--jnc-surface-hover);
+  color: var(--jnc-text);
+  border: 1px solid var(--jnc-border);
+}
+.jnc-btn--secondary:hover {
+  background-color: var(--jnc-border);
+}
+.jnc-btn--danger {
+  background-color: rgba(255, 77, 77, 0.15);
+  color: var(--jnc-danger);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+}
+.jnc-btn--danger:hover {
+  background-color: var(--jnc-danger);
+  color: #fff;
+}
+.jnc-btn--sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+.jnc-btn--lg {
+  padding: 14px 28px;
+  font-size: 16px;
+}
+
+/* Cards & Grid */
+.jnc-card {
+  background-color: var(--jnc-surface);
+  border: 1px solid var(--jnc-border);
+  border-radius: var(--jnc-radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.jnc-toolbar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.jnc-search {
+  position: relative;
+  flex: 1;
+}
+.jnc-search__icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--jnc-text-muted);
+}
+.jnc-search .jnc-input {
+  padding-left: 40px;
+}
+
+.jnc-input, .jnc-select, .jnc-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--jnc-bg) !important;
+  color: var(--jnc-text) !important;
+  border: 1px solid var(--jnc-border) !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+  font-family: var(--jnc-font) !important;
+}
+.jnc-input:focus, .jnc-select:focus, .jnc-textarea:focus {
+  border-color: var(--jnc-accent) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(0, 255, 170, 0.2) !important;
+}
+
+/* Grid de Jogos */
+.jnc-games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+.jnc-game-card {
+  background-color: var(--jnc-surface);
+  border: 1px solid var(--jnc-border);
+  border-radius: var(--jnc-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.jnc-game-card:hover {
+  border-color: var(--jnc-accent);
+  transform: translateY(-2px);
+}
+.jnc-game-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.jnc-game-card__title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--jnc-text);
+}
+.jnc-game-card__cat {
+  font-size: 11px;
+  font-weight: 700;
+  background-color: rgba(255, 247, 225, 0.1);
+  color: var(--jnc-text);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.jnc-game-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.jnc-tag {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--jnc-bg);
+  color: var(--jnc-text-muted);
+}
+.jnc-tag--accent {
+  background-color: rgba(0, 255, 170, 0.15);
+  color: var(--jnc-accent);
+}
+.jnc-game-card__desc {
+  font-size: 13px;
+  color: var(--jnc-text-muted);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  flex: 1;
+}
+.jnc-game-card__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--jnc-border);
+  padding-top: 12px;
+}
+
+/* Modais */
+.jnc-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.jnc-modal {
+  background-color: var(--jnc-surface);
+  border: 1px solid var(--jnc-border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  padding: 28px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+.jnc-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.jnc-modal__title {
+  margin: 0;
+  font-size: 20px;
+}
+.jnc-modal__close {
+  background: none;
+  border: none;
+  color: var(--jnc-text-muted);
+  font-size: 24px;
+  cursor: pointer;
+}
+.jnc-form-group {
+  margin-bottom: 16px;
+}
+.jnc-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.jnc-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--jnc-text-muted);
+}
+.jnc-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 8px;
+}
+.jnc-checkbox {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.jnc-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* Sub-abas de Prompts */
+.jnc-subtabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.jnc-subtab {
+  background-color: var(--jnc-surface);
+  color: var(--jnc-text-muted);
+  border: 1px solid var(--jnc-border);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.jnc-subtab.is-active {
+  background-color: var(--jnc-accent);
+  color: #1B2422;
+  border-color: var(--jnc-accent);
+}
+.jnc-prompt-form {
+  display: flex;
+  gap: 12px;
+}
+
+.jnc-prompts-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+.jnc-prompt-item {
+  background-color: var(--jnc-surface);
+  border: 1px solid var(--jnc-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.jnc-prompt-item__text {
+  font-size: 14px;
+  color: var(--jnc-text);
+}
+
+/* Import / Tabela / Badges */
+.jnc-import-info {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.jnc-import-icon {
+  font-size: 40px;
+}
+.jnc-code-box {
+  background-color: var(--jnc-bg);
+  border: 1px solid var(--jnc-border);
+  padding: 12px 16px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.jnc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+.jnc-table th, .jnc-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--jnc-border);
+}
+.jnc-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.jnc-badge--get { background: rgba(50, 188, 173, 0.2); color: #32BCAD; }
+.jnc-badge--post { background: rgba(0, 255, 170, 0.2); color: #00FFAA; }
+.jnc-badge--delete { background: rgba(255, 77, 77, 0.2); color: #FF4D4D; }
