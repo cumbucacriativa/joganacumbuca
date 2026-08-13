@@ -1,4 +1,6 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
+<?php if ( ! defined( 'ABSPATH' ) ) exit; 
+$assets = JNC_URL . 'public/assets/';
+?>
 
 <div class="jnc-view">
     <div class="jnc-view__header">
@@ -10,7 +12,7 @@
 
     <!-- Card Shortcode -->
     <div class="jnc-card">
-        <h3>📌 Exibir o App no Site (Shortcode)</h3>
+        <h3>Exibir o App no Site (Shortcode)</h3>
         <p>Para exibir a interface completa do Joga na Cumbuca em qualquer página ou post do WordPress, insira o shortcode:</p>
         <div class="jnc-code-box">
             <code>[joga_na_cumbuca]</code>
@@ -20,7 +22,7 @@
 
     <!-- Card REST API para n8n -->
     <div class="jnc-card">
-        <h3>🤖 Integração com n8n & API REST</h3>
+        <h3>Integração com n8n & API REST</h3>
         <p>O n8n e outras ferramentas externas podem ler, criar, editar e excluir jogos e frases diretamente por estas rotas REST:</p>
         
         <table class="jnc-table">

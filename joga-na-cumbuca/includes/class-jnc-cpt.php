@@ -5,6 +5,15 @@ class JNC_CPT {
 
     public function __construct() {
         add_action( 'init', array( __CLASS__, 'register' ) );
+        add_action( 'save_post_jnc_jogo', array( __CLASS__, 'purge_cache' ) );
+        add_action( 'deleted_post', array( __CLASS__, 'purge_cache' ) );
+    }
+
+    public static function purge_cache() {
+        if ( function_exists( 'w3tc_flush_posts' ) ) {
+            @w3tc_flush_posts();
+        }
+        wp_cache_flush();
     }
 
     public static function register() {

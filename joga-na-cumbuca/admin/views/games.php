@@ -1,4 +1,6 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
+<?php if ( ! defined( 'ABSPATH' ) ) exit; 
+$assets = JNC_URL . 'public/assets/';
+?>
 
 <div class="jnc-view">
     <div class="jnc-view__header">
@@ -7,19 +9,24 @@
             <p class="jnc-view__sub">Gerencie todos os jogos cadastrados no banco do WordPress.</p>
         </div>
         <button class="jnc-btn jnc-btn--primary" id="jncBtnNewGame">
-            + Novo Jogo
+            <img src="<?php echo esc_url( $assets . 'mais.svg' ); ?>" width="16" height="16" alt=""> Novo Jogo
         </button>
     </div>
 
     <!-- Barra de busca e filtros -->
     <div class="jnc-toolbar">
         <div class="jnc-search">
-            <span class="jnc-search__icon">🔍</span>
+            <img class="jnc-search__icon" src="<?php echo esc_url( $assets . 'lupa.svg' ); ?>" width="16" height="16" alt="">
             <input type="text" id="jncSearchGame" class="jnc-input" placeholder="Buscar jogo por nome ou descrição...">
         </div>
         <select id="jncFilterCategory" class="jnc-select">
             <option value="">Todas as Categorias</option>
-            <option value="Aquecimento">⚡ Aquecimento</option>
+            <option value="Aquecimento">Aquecimento</option>
+            <option value="Duplas">Duplas</option>
+            <option value="Grupos">Grupos</option>
+            <option value="Plateia">Plateia</option>
+            <option value="Todos">Todos</option>
+            <option value="Geral">Geral</option>
         </select>
     </div>
 
@@ -48,7 +55,13 @@
             <div class="jnc-form-row">
                 <div class="jnc-form-group">
                     <label for="gameCategory" class="jnc-label">Categoria *</label>
-                    <input type="text" id="gameCategory" class="jnc-input" placeholder="Ex: Duplas, Grupos, Plateia" required>
+                    <select id="gameCategory" class="jnc-select" required>
+                        <option value="Duplas">Duplas</option>
+                        <option value="Grupos">Grupos</option>
+                        <option value="Plateia">Plateia</option>
+                        <option value="Todos">Todos</option>
+                        <option value="Geral">Geral</option>
+                    </select>
                 </div>
                 <div class="jnc-form-group">
                     <label for="gameParticipants" class="jnc-label">Participantes *</label>

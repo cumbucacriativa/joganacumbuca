@@ -1,4 +1,6 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
+<?php if ( ! defined( 'ABSPATH' ) ) exit; 
+$assets = JNC_URL . 'public/assets/';
+?>
 
 <div class="jnc-view">
     <div class="jnc-view__header">
@@ -10,11 +12,11 @@
 
     <!-- Navegação de Sub-abas -->
     <div class="jnc-subtabs">
-        <button class="jnc-subtab is-active" data-type="frases">💬 Frases (<span id="cntFrases">0</span>)</button>
-        <button class="jnc-subtab" data-type="personagens">👤 Personagens (<span id="cntPersonagens">0</span>)</button>
-        <button class="jnc-subtab" data-type="locais">📍 Locais (<span id="cntLocais">0</span>)</button>
-        <button class="jnc-subtab" data-type="filmes">🎬 Filmes / Livros (<span id="cntFilmes">0</span>)</button>
-        <button class="jnc-subtab" data-type="adjetivos">🏷️ Adjetivos (<span id="cntAdjetivos">0</span>)</button>
+        <button class="jnc-subtab is-active" data-type="frases">Frases (<span id="cntFrases">0</span>)</button>
+        <button class="jnc-subtab" data-type="personagens">Personagens (<span id="cntPersonagens">0</span>)</button>
+        <button class="jnc-subtab" data-type="locais">Locais (<span id="cntLocais">0</span>)</button>
+        <button class="jnc-subtab" data-type="filmes">Filmes / Livros (<span id="cntFilmes">0</span>)</button>
+        <button class="jnc-subtab" data-type="adjetivos">Adjetivos (<span id="cntAdjetivos">0</span>)</button>
     </div>
 
     <!-- Form de adição rápida -->
@@ -29,7 +31,7 @@
     <!-- Busca de Prompts -->
     <div class="jnc-toolbar">
         <div class="jnc-search">
-            <span class="jnc-search__icon">🔍</span>
+            <img class="jnc-search__icon" src="<?php echo esc_url( $assets . 'lupa.svg' ); ?>" width="16" height="16" alt="">
             <input type="text" id="jncSearchPrompt" class="jnc-input" placeholder="Filtrar itens exibidos...">
         </div>
     </div>

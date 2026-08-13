@@ -1,4 +1,6 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
+<?php if ( ! defined( 'ABSPATH' ) ) exit; 
+$assets = JNC_URL . 'public/assets/';
+?>
 
 <div class="jnc-view">
     <div class="jnc-view__header">
@@ -10,7 +12,7 @@
 
     <div class="jnc-card jnc-import-card">
         <div class="jnc-import-info">
-            <span class="jnc-import-icon">📥</span>
+            <img class="jnc-import-icon" src="<?php echo esc_url( $assets . 'seta-baixo.svg' ); ?>" width="32" height="32" alt="">
             <div>
                 <h3>Sincronização em 1 Clique</h3>
                 <p>Clique no botão abaixo para importar todos os jogos de <code>data/jogos.csv</code> (60 jogos) e todas as sugestões de <code>data/aleatoriedades.csv</code> (500 itens) para o banco do WordPress.</p>
@@ -20,7 +22,7 @@
 
         <div class="jnc-import-actions">
             <button class="jnc-btn jnc-btn--primary jnc-btn--lg" id="jncBtnStartImport">
-                🚀 Sincronizar CSVs para o WordPress Agora
+                Sincronizar CSVs para o WordPress Agora
             </button>
         </div>
 

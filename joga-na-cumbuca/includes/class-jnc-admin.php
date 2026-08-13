@@ -43,38 +43,40 @@ class JNC_Admin {
         $prompts = JNC_CPT::get_all_prompts();
 
         wp_localize_script( 'jnc-admin-js', 'JNC_ADMIN_DATA', array(
-            'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'rest_url' => rest_url( 'jnc/v1/' ),
-            'nonce'    => wp_create_nonce( 'wp_rest' ),
-            'jogos'    => $jogos,
-            'prompts'  => $prompts,
-            'api_key'  => get_option( 'jnc_api_key', '' ),
+            'ajax_url'  => admin_url( 'admin-ajax.php' ),
+            'rest_url'  => rest_url( 'jnc/v1/' ),
+            'assets_url' => JNC_URL . 'public/assets/',
+            'nonce'     => wp_create_nonce( 'wp_rest' ),
+            'jogos'     => $jogos,
+            'prompts'   => $prompts,
+            'api_key'   => get_option( 'jnc_api_key', '' ),
         ) );
     }
 
     public function render_admin_page() {
         $tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'games';
+        $assets = JNC_URL . 'public/assets/';
         ?>
         <div class="jnc-app">
             <header class="jnc-topbar">
                 <div class="jnc-topbar__brand">
-                    <span class="jnc-topbar__logo">🎲</span>
+                    <img class="jnc-topbar__logo" src="<?php echo esc_url( $assets . 'dado.svg' ); ?>" width="24" height="24" alt="Icone">
                     <span class="jnc-topbar__title">Joga na Cumbuca</span>
                     <span class="jnc-topbar__badge">v<?php echo esc_html( JNC_VERSION ); ?></span>
                 </div>
 
                 <nav class="jnc-nav">
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=joga-na-cumbuca&tab=games' ) ); ?>" class="jnc-nav__item <?php echo $tab === 'games' ? 'is-active' : ''; ?>">
-                        🎲 Jogos de Improviso
+                        <img src="<?php echo esc_url( $assets . 'dado.svg' ); ?>" width="16" height="16" alt="" class="jnc-icon"> Jogos de Improviso
                     </a>
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=joga-na-cumbuca&tab=prompts' ) ); ?>" class="jnc-nav__item <?php echo $tab === 'prompts' ? 'is-active' : ''; ?>">
-                        💬 Aleatoriedades & Frases
+                        <img src="<?php echo esc_url( $assets . 'mais.svg' ); ?>" width="16" height="16" alt="" class="jnc-icon"> Aleatoriedades & Frases
                     </a>
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=joga-na-cumbuca&tab=import' ) ); ?>" class="jnc-nav__item <?php echo $tab === 'import' ? 'is-active' : ''; ?>">
-                        📥 Importar CSV
+                        <img src="<?php echo esc_url( $assets . 'seta-baixo.svg' ); ?>" width="16" height="16" alt="" class="jnc-icon"> Importar CSV
                     </a>
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=joga-na-cumbuca&tab=settings' ) ); ?>" class="jnc-nav__item <?php echo $tab === 'settings' ? 'is-active' : ''; ?>">
-                        ⚙️ Configurações & API
+                        <img src="<?php echo esc_url( $assets . 'casa-mais.svg' ); ?>" width="16" height="16" alt="" class="jnc-icon"> Configurações & API
                     </a>
                 </nav>
             </header>

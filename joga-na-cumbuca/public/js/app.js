@@ -10,7 +10,7 @@
     catIndex: 0,
     jogoAtual: null,
     contexto: 'Todas as Categorias',
-    categorias: ['Todas as Categorias', 'Aquecimento'],
+    categorias: ['Todas as Categorias', 'Aquecimento', 'Duplas', 'Grupos', 'Plateia', 'Todos', 'Geral'],
     personagens: [],
     locais: [],
     filmes: [],
@@ -19,10 +19,12 @@
   };
 
   document.addEventListener('DOMContentLoaded', function() {
-    if (!state.jogos.length && wpData.rest_url) {
+    // Inicializa imediatamente com dados em cache para 0ms de espera
+    initApp();
+    
+    // E sempre busca os dados mais recentes em tempo real da REST API do WordPress
+    if (wpData.rest_url) {
       fetchDataFromAPI();
-    } else {
-      initApp();
     }
   });
 
@@ -33,9 +35,12 @@
     ]).then(([jRes, pRes]) => {
       if (jRes.jogos) state.jogos = jRes.jogos;
       if (pRes.prompts) prompts = pRes.prompts;
-      initApp();
+      setupCategories();
+      setupPrompts();
+      renderLista();
+      renderCategoria();
     }).catch(err => {
-      console.error('Erro ao carregar dados do Joga na Cumbuca:', err);
+      console.error('Erro ao carregar dados atualizados do Joga na Cumbuca:', err);
     });
   }
 
@@ -96,11 +101,12 @@
     if (descEl) descEl.textContent = state.jogoAtual.descricao;
 
     if (tagsEl) {
+      const assetsUrl = wpData.assets_url || '';
       tagsEl.innerHTML = `
-        <span class="tag"><img src="${wpData.url || ''}public/assets/tag-participantes.svg" alt=""> ${state.jogoAtual.participantes}</span>
-        ${state.jogoAtual.mediador === 'sim' ? `<span class="tag"><img src="${wpData.url || ''}public/assets/tag-mediador.svg" alt=""> Mediador</span>` : ''}
-        ${state.jogoAtual.aquecimento === 'sim' ? `<span class="tag"><img src="${wpData.url || ''}public/assets/tag-aquecimento.svg" alt=""> Aquecimento</span>` : ''}
-        ${state.jogoAtual.musica === 'sim' ? `<span class="tag"><img src="${wpData.url || ''}public/assets/tag-musica.svg" alt=""> Música</span>` : ''}
+        <span class="tag"><img src="${assetsUrl}tag-participantes.svg" alt=""> ${state.jogoAtual.participantes}</span>
+        ${state.jogoAtual.mediador === 'sim' ? `<span class="tag"><img src="${assetsUrl}tag-mediador.svg" alt=""> Mediador</span>` : ''}
+        ${state.jogoAtual.aquecimento === 'sim' ? `<span class="tag"><img src="${assetsUrl}tag-aquecimento.svg" alt=""> Aquecimento</span>` : ''}
+        ${state.jogoAtual.musica === 'sim' ? `<span class="tag"><img src="${assetsUrl}tag-musica.svg" alt=""> Música</span>` : ''}
       `;
     }
   }
@@ -163,6 +169,68 @@
           alert('Erro ao excluir jogo: ' + (res.message || 'Permissão negada'));
         }
       }).catch(() => alert('Erro de rede ao excluir jogo'));
+    });
+
+    // Modal de Novo Jogo no Frontend
+    const addBadge = document.getElementById('add-badge');
+    const frontModal = document.getElementById('front-add-modal');
+    const frontClose = document.getElementById('front-add-close');
+    const frontCancel = document.getElementById('front-add-cancel');
+    const frontForm = document.getElementById('front-add-form');
+
+    const toggleFrontModal = (open) => {
+      if (open) frontModal?.classList.add('is-open');
+      else frontModal?.classList.remove('is-open');
+    };
+
+    addBadge?.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleFrontModal(true);
+    });
+
+    frontClose?.addEventListener('click', () => toggleFrontModal(false));
+    frontCancel?.addEventListener('click', () => toggleFrontModal(false));
+
+    frontForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newGame = {
+        jogo: document.getElementById('frontGameName').value.trim(),
+        categoria: document.getElementById('frontGameCategory').value,
+        participantes: document.getElementById('frontGameParticipants').value.trim() || '2+',
+        mediador: document.getElementById('frontGameMediador').checked ? 'sim' : 'não',
+        aquecimento: document.getElementById('frontGameAquecimento').checked ? 'sim' : 'não',
+        musica: document.getElementById('frontGameMusica').checked ? 'sim' : 'não',
+        descricao: document.getElementById('frontGameDescription').value.trim(),
+        visivel: '1',
+      };
+
+      fetch(wpData.rest_url + 'jogos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-WP-Nonce': wpData.nonce
+        },
+        body: JSON.stringify(newGame)
+      }).then(r => r.json()).then(res => {
+        if (res.status === 'success') {
+          alert('Jogo cadastrado com sucesso no WordPress!');
+          newGame.id = res.id;
+          state.jogos.unshift(newGame);
+          setupCategories();
+          frontForm.reset();
+          toggleFrontModal(false);
+          state.jogoAtual = newGame;
+          const titleEl = document.getElementById('game-title');
+          const idEl = document.getElementById('game-id');
+          const descEl = document.getElementById('game-description');
+          if (titleEl) titleEl.textContent = newGame.jogo;
+          if (idEl) idEl.textContent = '#' + newGame.id;
+          if (descEl) descEl.textContent = newGame.descricao;
+          switchScreen('screen-jogo');
+        } else {
+          alert('Erro ao salvar jogo: ' + (res.message || 'Falha na requisição'));
+        }
+      }).catch(err => alert('Erro de rede ao salvar jogo'));
     });
 
     // Drawer de opções / Dado

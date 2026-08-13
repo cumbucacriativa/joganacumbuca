@@ -2,6 +2,7 @@
   'use strict';
 
   const DATA = window.JNC_ADMIN_DATA || {};
+  const assetsUrl = DATA.assets_url || '';
   let games = DATA.jogos || [];
   let prompts = DATA.prompts || { personagens: [], locais: [], filmes: [], adjetivos: [], frases: [] };
   let currentSubTab = 'frases';
@@ -17,7 +18,6 @@
   function initGamesView() {
     if (!$('#jncGamesGrid').length) return;
 
-    populateCategories();
     renderGames();
 
     // Filtros e Busca
@@ -39,15 +39,6 @@
     $('#jncFormGame').on('submit', function(e) {
       e.preventDefault();
       saveGame();
-    });
-  }
-
-  function populateCategories() {
-    const cats = [...new Set(games.map(g => g.categoria).filter(Boolean))];
-    const $select = $('#jncFilterCategory');
-    $select.find('option:gt(1)').remove();
-    cats.forEach(c => {
-      $select.append(`<option value="${c}">${c}</option>`);
     });
   }
 
@@ -83,10 +74,10 @@
           </div>
 
           <div class="jnc-game-card__tags">
-            <span class="jnc-tag">👥 ${g.participantes}</span>
-            ${g.mediador === 'sim' ? '<span class="jnc-tag">🎤 Mediador</span>' : ''}
-            ${g.aquecimento === 'sim' ? '<span class="jnc-tag jnc-tag--accent">⚡ Aquecimento</span>' : ''}
-            ${g.musica === 'sim' ? '<span class="jnc-tag">🎵 Música</span>' : ''}
+            <span class="jnc-tag"><img src="${assetsUrl}tag-participantes.svg" width="12" height="12" alt=""> ${g.participantes}</span>
+            ${g.mediador === 'sim' ? `<span class="jnc-tag"><img src="${assetsUrl}tag-mediador.svg" width="12" height="12" alt=""> Mediador</span>` : ''}
+            ${g.aquecimento === 'sim' ? `<span class="jnc-tag jnc-tag--accent"><img src="${assetsUrl}tag-aquecimento.svg" width="12" height="12" alt=""> Aquecimento</span>` : ''}
+            ${g.musica === 'sim' ? `<span class="jnc-tag"><img src="${assetsUrl}tag-musica.svg" width="12" height="12" alt=""> Música</span>` : ''}
           </div>
 
           <div class="jnc-game-card__desc">${g.descricao}</div>
@@ -94,12 +85,12 @@
           <div class="jnc-game-card__actions">
             <div>
               <button class="jnc-btn jnc-btn--sm ${isVisible ? 'jnc-btn--secondary' : 'jnc-btn--danger'} btn-toggle-vis" data-id="${g.id}">
-                ${isVisible ? '👁️ Visível' : '🙈 Oculto'}
+                ${isVisible ? 'Visível' : 'Oculto'}
               </button>
             </div>
             <div style="display:flex; gap:6px;">
-              <button class="jnc-btn jnc-btn--sm jnc-btn--secondary btn-edit-game" data-id="${g.id}">✏️ Editar</button>
-              <button class="jnc-btn jnc-btn--sm jnc-btn--danger btn-delete-game" data-id="${g.id}">🗑️</button>
+              <button class="jnc-btn jnc-btn--sm jnc-btn--secondary btn-edit-game" data-id="${g.id}">Editar</button>
+              <button class="jnc-btn jnc-btn--sm jnc-btn--danger btn-delete-game" data-id="${g.id}"><img src="${assetsUrl}lixeira.svg" width="12" height="12" alt="Excluir"></button>
             </div>
           </div>
         </div>
@@ -135,7 +126,7 @@
       $('#jncModalTitle').text('Editar Jogo');
       $('#gameId').val(game.id);
       $('#gameName').val(game.jogo);
-      $('#gameCategory').val(game.categoria);
+      $('#gameCategory').val(game.categoria || 'Geral');
       $('#gameParticipants').val(game.participantes);
       $('#gameMediador').prop('checked', game.mediador === 'sim');
       $('#gameAquecimento').prop('checked', game.aquecimento === 'sim');
@@ -146,6 +137,7 @@
       $('#jncModalTitle').text('Novo Jogo');
       $('#gameId').val('');
       $('#jncFormGame')[0].reset();
+      $('#gameCategory').val('Duplas');
       $('#gameVisivel').prop('checked', true);
     }
     $('#jncModalGame').fadeIn(200);
@@ -188,7 +180,6 @@
             gameData.id = res.id;
             games.unshift(gameData);
           }
-          populateCategories();
           renderGames();
           if (callback) callback();
         }
@@ -207,7 +198,6 @@
       headers: { 'X-WP-Nonce': DATA.nonce },
       success: function(res) {
         games = games.filter(g => String(g.id) !== String(id));
-        populateCategories();
         renderGames();
       },
       error: function(err) {
@@ -270,7 +260,7 @@
       html += `
         <div class="jnc-prompt-item" data-id="${item.id}">
           <span class="jnc-prompt-item__text">${item.text}</span>
-          <button class="jnc-btn jnc-btn--sm jnc-btn--danger btn-delete-prompt" data-id="${item.id}">🗑️</button>
+          <button class="jnc-btn jnc-btn--sm jnc-btn--danger btn-delete-prompt" data-id="${item.id}"><img src="${assetsUrl}lixeira.svg" width="12" height="12" alt="Excluir"></button>
         </div>
       `;
     });
@@ -343,7 +333,7 @@
       const $btn = $(this);
       const $res = $('#jncImportResult');
 
-      $btn.prop('disabled', true).text('⏳ Sincronizando CSVs...');
+      $btn.prop('disabled', true).text('Sincronizando CSVs...');
       $res.hide();
 
       $.ajax({
@@ -354,16 +344,16 @@
           nonce: DATA.nonce
         },
         success: function(res) {
-          $btn.prop('disabled', false).text('🚀 Sincronizar CSVs para o WordPress Agora');
+          $btn.prop('disabled', false).text('Sincronizar CSVs para o WordPress Agora');
           if (res.success) {
-            $res.removeClass('is-error').addClass('is-success').html('✅ ' + res.data.message).slideDown();
+            $res.removeClass('is-error').addClass('is-success').html(res.data.message).slideDown();
           } else {
-            $res.removeClass('is-success').addClass('is-error').html('❌ ' + (res.data.message || 'Erro ao importar')).slideDown();
+            $res.removeClass('is-success').addClass('is-error').html(res.data.message || 'Erro ao importar').slideDown();
           }
         },
         error: function() {
-          $btn.prop('disabled', false).text('🚀 Sincronizar CSVs para o WordPress Agora');
-          $res.removeClass('is-success').addClass('is-error').html('❌ Erro na requisição AJAX').slideDown();
+          $btn.prop('disabled', false).text('Sincronizar CSVs para o WordPress Agora');
+          $res.removeClass('is-success').addClass('is-error').html('Erro na requisição AJAX').slideDown();
         }
       });
     });
